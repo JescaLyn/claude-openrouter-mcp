@@ -16,6 +16,7 @@ import { z } from 'zod';
 import { error, success, toolResult, unknownError } from '../envelope.js';
 import { chainFor } from '../models.js';
 import { wrapUntrusted } from '../prompt.js';
+import { MAX_BASE64_BYTES, validateUserUrl } from '../security.js';
 import type { ChatRequest, ToolContext } from '../types.js';
 
 // URL or data:video/...;base64,...
@@ -63,7 +64,11 @@ const Args = z.object({
   video: z
     .string()
     .min(1)
-    .regex(VIDEO_INPUT_REGEX, 'video must be an https URL or a data:video/...;base64,... data URL'),
+    .max(MAX_BASE64_BYTES, `video data URI exceeds ${MAX_BASE64_BYTES} byte cap`)
+    .regex(VIDEO_INPUT_REGEX, 'video must be an https URL or a data:video/...;base64,... data URL')
+    .refine((s) => validateUserUrl(s).ok, (s) => ({
+      message: validateUserUrl(s).reason ?? 'video URL rejected',
+    })),
   prompt: z.string().min(1),
   fps_hint: z.number().int().positive().max(30).default(1),
   model: z.string().optional(),

@@ -16,7 +16,8 @@
 import { z } from 'zod';
 
 import { error, success, toolResult, unknownError } from '../envelope.js';
-import { PAID_GENERATION_MODELS } from '../models.js';
+import { PAID_GENERATION_MODELS, PROVIDER_DEFAULTS } from '../models.js';
+import { MAX_BASE64_BYTES } from '../security.js';
 import type { ToolContext } from '../types.js';
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
@@ -95,7 +96,7 @@ export const definition = {
 };
 
 const Args = z.object({
-  audio: z.string().min(1),
+  audio: z.string().min(1).max(MAX_BASE64_BYTES, `audio data exceeds ${MAX_BASE64_BYTES} byte cap`),
   format: z.enum(FORMATS),
   prompt: z.string().default('Transcribe this audio verbatim.'),
   language_hint: z.string().optional(),
@@ -209,6 +210,9 @@ async function callTranscribeEndpoint(
         ],
       },
     ],
+    // Server-level provider routing — keeps user audio/transcripts off
+    // prompt-logging providers per the data_collection: 'deny' policy.
+    provider: PROVIDER_DEFAULTS,
   };
 
   let res: Response;

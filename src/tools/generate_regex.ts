@@ -219,13 +219,6 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
       validated.validation.positive_passed.every(Boolean) &&
       validated.validation.negative_passed.every(Boolean);
 
-    let firstAttemptFallbackChain = first.fallback_chain;
-    let firstAttemptModelUsed = first.model_used;
-    let firstAttemptTokensIn = first.tokens_in;
-    let firstAttemptTokensOut = first.tokens_out;
-    let firstAttemptFinishReason = first.finish_reason;
-    let firstAttemptCostUsd = first.cost_usd;
-
     if (allPassed && 'validation' in validated) {
       const result: RegexResult = {
         pattern: validated.pattern,
@@ -235,12 +228,12 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
       return toolResult(
         success({
           result,
-          model_used: firstAttemptModelUsed,
-          tokens_in: firstAttemptTokensIn,
-          tokens_out: firstAttemptTokensOut,
-          finish_reason: firstAttemptFinishReason,
-          fallback_chain: firstAttemptFallbackChain,
-          cost_usd: firstAttemptCostUsd,
+          model_used: first.model_used,
+          tokens_in: first.tokens_in,
+          tokens_out: first.tokens_out,
+          finish_reason: first.finish_reason,
+          fallback_chain: first.fallback_chain,
+          cost_usd: first.cost_usd,
         }),
       );
     }

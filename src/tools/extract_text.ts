@@ -16,6 +16,7 @@ import { z } from 'zod';
 
 import { error, success, toolResult, unknownError } from '../envelope.js';
 import { chainFor } from '../models.js';
+import { MAX_BASE64_BYTES, validateUserUrl } from '../security.js';
 import type { ChatRequest, ToolContext } from '../types.js';
 
 // URL or data:image/...;base64,...
@@ -63,7 +64,11 @@ const Args = z.object({
   image: z
     .string()
     .min(1)
-    .regex(IMAGE_INPUT_REGEX, 'image must be an https URL or a data:image/...;base64,... data URL'),
+    .max(MAX_BASE64_BYTES, `image data URI exceeds ${MAX_BASE64_BYTES} byte cap`)
+    .regex(IMAGE_INPUT_REGEX, 'image must be an https URL or a data:image/...;base64,... data URL')
+    .refine((s) => validateUserUrl(s).ok, (s) => ({
+      message: validateUserUrl(s).reason ?? 'image URL rejected',
+    })),
   language_hint: z.string().optional(),
   preserve_layout: z.boolean().default(false),
   model: z.string().optional(),

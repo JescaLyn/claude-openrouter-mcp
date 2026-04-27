@@ -146,7 +146,10 @@ describe('generate_video — paid lifecycle', () => {
     const env = parseEnvelope(result);
 
     expect(env.error.code).toBe('UPSTREAM_TIMEOUT');
-    expect(env.error.suggested_action).toContain('https://or/v1/videos/job-3');
+    // SECURITY: an off-host polling_url in the upstream response is ignored —
+    // the bearer token must never travel to a host the response can name freely.
+    // The suggested action falls back to the canonical openrouter.ai URL.
+    expect(env.error.suggested_action).toContain('https://openrouter.ai/api/v1/videos/job-3');
   });
 
   it('surfaces 404 from create as MODEL_NOT_FOUND', async () => {

@@ -9,7 +9,7 @@
 import { z } from 'zod';
 
 import { error, success, toolResult, unknownError } from '../envelope.js';
-import { composeMessages } from '../prompt.js';
+import { composeMessages, wrapUntrusted } from '../prompt.js';
 import { chainFor } from '../models.js';
 import type { ToolContext } from '../types.js';
 
@@ -79,11 +79,10 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
 
   const system = `You are a SQL expert generating a query for ${args.dialect}. ${DIALECT_NOTES[args.dialect]} Output ONLY the SQL query — no explanation, no commentary, no markdown code fences, no preamble. The output will be sent directly to the database driver.`;
 
-  const instruction = `Schema:\n${args.schema}\n\nIntent: ${args.intent}\n\nWrite a single ${args.dialect} query that satisfies the intent. SQL only.`;
-
   const messages = composeMessages({
     system,
-    instruction,
+    instruction: `Write a single ${args.dialect} query that satisfies the intent. SQL only.`,
+    untrusted: `Schema:\n${args.schema}\n\nIntent: ${args.intent}`,
   });
 
   try {

@@ -16,6 +16,7 @@ import { z } from 'zod';
 import { error, success, toolResult, unknownError } from '../envelope.js';
 import { chainFor } from '../models.js';
 import { composeMessages } from '../prompt.js';
+import { MAX_SCHEMA_BYTES } from '../security.js';
 import type { ToolContext } from '../types.js';
 
 export const definition = {
@@ -62,7 +63,12 @@ export const definition = {
 
 const Args = z.object({
   text: z.string().min(1),
-  schema: z.record(z.string(), z.unknown()),
+  schema: z
+    .record(z.string(), z.unknown())
+    // Cap schema size to prevent DOS via deeply-nested or $ref-cycled schemas.
+    .refine((s) => JSON.stringify(s).length <= MAX_SCHEMA_BYTES, {
+      message: `schema exceeds ${MAX_SCHEMA_BYTES}-byte cap (deeply nested or $ref-cycled?)`,
+    }),
   instructions: z.string().optional(),
   allow_missing: z.boolean().default(true),
   model: z.string().optional(),

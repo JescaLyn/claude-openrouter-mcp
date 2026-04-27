@@ -16,7 +16,7 @@
 import { z } from 'zod';
 
 import { error, success, toolResult, unknownError } from '../envelope.js';
-import { PAID_GENERATION_MODELS } from '../models.js';
+import { PAID_GENERATION_MODELS, PROVIDER_DEFAULTS } from '../models.js';
 import type { ToolContext } from '../types.js';
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/audio/speech';
@@ -172,6 +172,9 @@ async function callTtsEndpoint(
     input: args.text,
     voice: args.voice,
     response_format: args.format,
+    // Server-level provider routing — data_collection: 'deny' protects user
+    // input text from prompt-logging providers.
+    provider: PROVIDER_DEFAULTS,
   };
 
   let res: Response;

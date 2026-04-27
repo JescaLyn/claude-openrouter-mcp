@@ -193,14 +193,19 @@ export class OpenRouterClient {
   private async callOnce(
     opts: ChatOptions & { model: string },
   ): Promise<CallOnceResult> {
+    // Provider preferences are server-level and locked: data_collection: 'deny'
+    // protects user code/diffs/text from prompt-logging providers. The merge
+    // order below ensures `extra` cannot override that lock — `provider` is
+    // re-spread AFTER `extra` so the server-level defaults win on conflict.
+    // Per-call legitimate overrides (rare) come through opts.provider.
     const body: ChatRequest = {
       model: opts.model,
       messages: opts.messages,
       ...(opts.max_tokens !== undefined && { max_tokens: opts.max_tokens }),
       ...(opts.temperature !== undefined && { temperature: opts.temperature }),
       ...(opts.response_format && { response_format: opts.response_format }),
-      provider: { ...PROVIDER_DEFAULTS, ...opts.provider },
       ...(opts.extra ?? {}),
+      provider: { ...PROVIDER_DEFAULTS, ...opts.provider },
     };
 
     let res: Response;

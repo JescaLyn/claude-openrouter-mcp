@@ -18,7 +18,8 @@
 import { z } from 'zod';
 
 import { error, success, toolResult, unknownError } from '../envelope.js';
-import { PAID_GENERATION_MODELS } from '../models.js';
+import { PAID_GENERATION_MODELS, PROVIDER_DEFAULTS } from '../models.js';
+import { isOpenRouterHost } from '../security.js';
 import type { ToolContext } from '../types.js';
 
 const POST_ENDPOINT = 'https://openrouter.ai/api/v1/videos';
@@ -216,6 +217,7 @@ async function runVideoJob(
     resolution: args.resolution,
     aspect_ratio: args.aspect_ratio,
     generate_audio: args.with_audio,
+    provider: PROVIDER_DEFAULTS,
   };
 
   let createRes: Response;
@@ -305,7 +307,14 @@ async function runVideoJob(
     );
   }
 
-  const pollingUrl = createData.polling_url ?? `${POST_ENDPOINT}/${jobId}`;
+  // SECURITY: never attach our bearer token to a host the OpenRouter response
+  // names freely — a redirect or compromised response could exfiltrate the key.
+  // Always poll openrouter.ai/api/v1/videos/{id}; ignore polling_url unless it
+  // also lives on openrouter.ai.
+  const candidatePollingUrl = createData.polling_url ?? `${POST_ENDPOINT}/${jobId}`;
+  const pollingUrl = isOpenRouterHost(candidatePollingUrl)
+    ? candidatePollingUrl
+    : `${POST_ENDPOINT}/${jobId}`;
 
   // ── Step 2: poll for completion ───────────────────────────────────────────
   const deadline = Date.now() + args.poll_timeout_seconds * 1000;

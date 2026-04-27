@@ -59,7 +59,7 @@ export const definition = {
       },
       style: {
         type: 'string',
-        enum: ['google', 'numpy', 'jsdoc', 'tsdoc', 'rust'],
+        enum: ['google', 'numpy', 'jsdoc', 'tsdoc', 'rust', 'go-style'],
         description:
           "Docstring convention to emit. Defaults pick by language: python→google, javascript→jsdoc, typescript→tsdoc, go→go-style, rust→rust.",
       },
@@ -80,7 +80,7 @@ export const definition = {
 const Args = z.object({
   code: z.string().min(1),
   language: z.string().min(1),
-  style: z.enum(['google', 'numpy', 'jsdoc', 'tsdoc', 'rust']).optional(),
+  style: z.enum(['google', 'numpy', 'jsdoc', 'tsdoc', 'rust', 'go-style']).optional(),
   model: z.string().optional(),
   allow_paid: z.boolean().default(false),
 });

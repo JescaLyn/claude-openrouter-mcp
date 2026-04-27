@@ -21,6 +21,7 @@ import { z } from 'zod';
 import { error, success, toolResult, unknownError } from '../envelope.js';
 import { chainFor } from '../models.js';
 import { wrapUntrusted } from '../prompt.js';
+import { MAX_BASE64_BYTES, validateUserUrl } from '../security.js';
 import type { ChatRequest, ToolContext } from '../types.js';
 
 const PDF_INPUT_REGEX = /^(https?:\/\/.+|data:application\/pdf;base64,[A-Za-z0-9+/=]+)$/;
@@ -79,10 +80,14 @@ const Args = z.object({
   pdf: z
     .string()
     .min(1)
+    .max(MAX_BASE64_BYTES, `pdf data URI exceeds ${MAX_BASE64_BYTES} byte cap`)
     .regex(
       PDF_INPUT_REGEX,
       "pdf must be an https URL or a 'data:application/pdf;base64,...' data URL",
-    ),
+    )
+    .refine((s) => validateUserUrl(s).ok, (s) => ({
+      message: validateUserUrl(s).reason ?? 'pdf URL rejected',
+    })),
   prompt: z.string().min(1),
   engine: z.enum(['cloudflare-ai', 'mistral-ocr']).default('cloudflare-ai'),
   model: z.string().optional(),

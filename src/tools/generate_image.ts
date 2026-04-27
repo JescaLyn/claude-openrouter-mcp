@@ -21,7 +21,8 @@
 import { z } from 'zod';
 
 import { error, success, toolResult, unknownError } from '../envelope.js';
-import { PAID_GENERATION_MODELS } from '../models.js';
+import { PAID_GENERATION_MODELS, PROVIDER_DEFAULTS } from '../models.js';
+import { MAX_BASE64_BYTES, validateUserUrl } from '../security.js';
 import type { ToolContext } from '../types.js';
 
 const ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
@@ -114,7 +115,13 @@ const Args = z.object({
   prompt: z.string().min(1),
   size: z.enum(['1K', '2K', '4K']).default('1K'),
   aspect_ratio: z.enum(['1:1', '16:9', '9:16', '4:3']).default('1:1'),
-  reference_image: z.string().optional(),
+  reference_image: z
+    .string()
+    .max(MAX_BASE64_BYTES, `reference_image exceeds ${MAX_BASE64_BYTES} byte cap`)
+    .refine((s) => validateUserUrl(s).ok, (s) => ({
+      message: validateUserUrl(s).reason ?? 'reference_image URL rejected',
+    }))
+    .optional(),
   model: z.string().optional(),
   allow_paid: z.boolean().default(false),
 });
@@ -233,6 +240,10 @@ async function callImageEndpoint(
       aspect_ratio: args.aspect_ratio,
       image_size: args.size,
     },
+    // Apply server-level provider routing — same defaults as OpenRouterClient.
+    // data_collection: 'deny' is critical: user prompts may carry sensitive
+    // content and must NOT flow to providers that retain prompts for training.
+    provider: PROVIDER_DEFAULTS,
   };
 
   let res: Response;
