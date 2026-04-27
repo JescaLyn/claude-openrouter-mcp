@@ -21,16 +21,68 @@ import {
 
 import { OpenRouterClient } from './client.js';
 import { error as errEnv, toolResult } from './envelope.js';
+// Foundation (3)
 import * as queryModelTool from './tools/query_model.js';
 import * as queryFreeTool from './tools/query_free.js';
 import * as listFreeModelsTool from './tools/list_free_models.js';
+// Text wrappers (5)
+import * as summarizeTool from './tools/summarize.js';
+import * as extractTool from './tools/extract.js';
+import * as classifyTool from './tools/classify.js';
+import * as translateTool from './tools/translate.js';
+import * as rewriteTool from './tools/rewrite.js';
+// Code wrappers (5)
+import * as explainCodeTool from './tools/explain_code.js';
+import * as generateDocstringTool from './tools/generate_docstring.js';
+import * as generateRegexTool from './tools/generate_regex.js';
+import * as generateSqlTool from './tools/generate_sql.js';
+import * as commitMessageTool from './tools/commit_message.js';
+// Free input-processing (5)
+import * as extractTextTool from './tools/extract_text.js';
+import * as analyzeImageTool from './tools/analyze_image.js';
+import * as readPdfTool from './tools/read_pdf.js';
+import * as analyzeVideoTool from './tools/analyze_video.js';
+import * as queryLongContextTool from './tools/query_long_context.js';
+// Paid generation (3) + paid input-processing (1)
+import * as generateImageTool from './tools/generate_image.js';
+import * as generateAudioTool from './tools/generate_audio.js';
+import * as generateVideoTool from './tools/generate_video.js';
+import * as transcribeTool from './tools/transcribe.js';
 import type { ToolContext } from './types.js';
 
 const SERVER_NAME = 'openrouter-mcp';
 const SERVER_VERSION = '0.1.0';
 
-// All registered tools — definition + handler. Phase 2 will add 19 more.
-const TOOLS = [queryModelTool, queryFreeTool, listFreeModelsTool] as const;
+// All 22 registered tools — definition + handler.
+const TOOLS = [
+  // Foundation
+  queryModelTool,
+  queryFreeTool,
+  listFreeModelsTool,
+  // Text
+  summarizeTool,
+  extractTool,
+  classifyTool,
+  translateTool,
+  rewriteTool,
+  // Code
+  explainCodeTool,
+  generateDocstringTool,
+  generateRegexTool,
+  generateSqlTool,
+  commitMessageTool,
+  // Free input-processing
+  extractTextTool,
+  analyzeImageTool,
+  readPdfTool,
+  analyzeVideoTool,
+  queryLongContextTool,
+  // Paid generation + input-processing
+  generateImageTool,
+  generateAudioTool,
+  generateVideoTool,
+  transcribeTool,
+] as const;
 
 /**
  * Lazy credential gate — server starts even without an API key, but every
