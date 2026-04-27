@@ -146,6 +146,14 @@ openrouter-mcp/
 └── vitest.config.ts
 ```
 
+## Build Phase Status
+
+- ✅ **Phase 0** — Plugin scaffold complete (commit 8f7179f).
+- ✅ **Phase 1** — Core client + foundation tools complete (commit 8c23712). 26 unit tests covering envelope, pricing trap, prompt-injection wrap, fallback chain, 429 retry timing, paid gate.
+- ✅ **Phase 2** — All 19 wrapper tools complete (commit b3c1496). Built by 4 parallel subagents (text, code, multimodal, paid). 133 total tests pass.
+- 🔄 **Phase 3** — Docs polish in progress.
+- ⏳ **Phase 4** — Code + security review pending.
+
 ## Build Phases
 
 ### Phase 0 — Plugin scaffold *(direct, no subagent)*

@@ -2,7 +2,7 @@
 
 MCP server (also packaged as a Claude Code plugin) that exposes OpenRouter models as named tools for Claude Code sessions. Lets Claude delegate routine, leaf-node work — summarize, extract, classify, OCR, code explanation, commit messages, etc. — to free OpenRouter models to save context and tokens. Paid options exist for capabilities with no free path (image / audio / video generation, audio transcription) but require explicit per-call user approval.
 
-> **Status: Pre-implementation.** This README describes the planned shape. Implementation is in progress; see `docs/PLAN.md` for current state.
+> **Status: v0.1.0 draft.** All 22 tools are implemented and unit-tested. The plugin manifest is in place. End-to-end live testing against OpenRouter is the next step; see `docs/PLAN.md` for the build phase status.
 
 ## Why
 
@@ -118,18 +118,74 @@ That's it. No other configuration. The server picks sensible models per task; yo
 - [`docs/MODELS.md`](docs/MODELS.md) — verified free model list, per-task curated map, refresh procedure
 - [`CLAUDE.md`](CLAUDE.md) — operational guide for Claude Code sessions (loaded automatically)
 
-## Status
+## Examples
 
-Pre-implementation. Build phases:
+Claude calls these tools from a session — you don't usually call them directly. But to test connectivity once installed, ask Claude something like:
 
-- **Phase 0** — Plugin scaffold (TS + MCP SDK + `.claude-plugin/plugin.json`)
-- **Phase 1** — Core client + foundation tools (`query_model`, `query_free`, `list_free_models`)
-- **Phase 2** — Wrappers (text, code, free input-processing, paid)
-- **Phase 3** — Polish docs (full README, CLAUDE.md sweep)
-- **Phase 4** — Code review + security review
+> "Use the openrouter list_free_models tool to show me what's available."
 
-See `docs/PLAN.md` for current phase and agent assignments.
+> "Summarize this article: <paste>. Use the openrouter summarize tool."
+
+> "Generate an image of a sunset over a mountain. Use the openrouter generate_image tool — go ahead and approve the cost."
+
+For the third example, Claude will first call `generate_image` *without* `allow_paid: true`. The tool returns a `PAID_CONFIRMATION_REQUIRED` envelope with the estimated cost (e.g. `~$0.014 for FLUX.2 Klein 4B at 1024×1024`). Claude shows that to you, you approve, Claude retries with `allow_paid: true`.
+
+## Development
+
+```bash
+git clone <repo>
+cd openrouter-mcp
+npm install
+npm run build       # tsc → dist/
+npm test            # vitest run, all tests
+npm run typecheck   # tsc --noEmit
+npm run probe:models  # refresh src/models.snapshot.json against the live API
+```
+
+Project layout:
+
+```
+src/
+├── server.ts           # MCP entry point with stdout-discipline guard + lazy credential gate
+├── client.ts           # OpenRouterClient — three-tier fallback, 429 retry, paid gate
+├── models.ts           # per-task curated map; Provider routing defaults
+├── models.snapshot.json # offline fallback for /api/frontend/models
+├── probe.ts            # live model probe with v1 + snapshot fallbacks
+├── envelope.ts         # success/error envelope builders
+├── prompt.ts           # composeMessages() + wrapUntrusted()
+├── types.ts            # shared types
+└── tools/              # 22 tool implementations, one file each
+tests/                  # vitest unit tests, one per tool + foundation tests
+scripts/probe-models.ts # CLI for refreshing the snapshot
+docs/                   # PLAN, RESEARCH, TOOLS, MODELS — see CLAUDE.md
+```
+
+### How tools route models
+
+Each task has a curated chain in `src/models.ts`: free primary → free fallback → cheap-paid escalation. The client walks the chain on each call: 5xx or 404 falls through immediately; 429 honors `Retry-After` and `X-RateLimit-Reset` headers and retries once before falling through. The paid step only runs when the caller passes `allow_paid: true` — otherwise the chain returns `PAID_CONFIRMATION_REQUIRED` with the cost estimate after both free attempts fail.
+
+### Refreshing the curated free model list
+
+OpenRouter's free tier shifts. If a curated model returns `MODEL_NOT_FOUND`:
+
+```bash
+npm run probe:models
+```
+
+Prints a diff between `src/models.ts` and the live free list, surfaces newly-added free options, and writes a fresh offline snapshot to `src/models.snapshot.json`. Then update the affected entry in `src/models.ts`.
+
+See [`docs/MODELS.md`](docs/MODELS.md) for the full refresh procedure and the **pricing trap** (image/audio/video models legitimately show $0/$0 in OpenRouter's UI token columns; the actual price lives in `pricing.image_output`, `pricing.audio`, or `pricing.video_output`).
+
+## Build phase status
+
+- ✅ **Phase 0** — Plugin scaffold (TS + MCP SDK + `.claude-plugin/plugin.json` with `userConfig.openrouter_api_key`)
+- ✅ **Phase 1** — Core client + foundation tools (`query_model`, `query_free`, `list_free_models`)
+- ✅ **Phase 2** — All 19 wrapper tools (text, code, free input-processing, paid generation)
+- ✅ **Phase 3** — Docs polish
+- ⏳ **Phase 4** — Code review + security review
+- ⏳ Live end-to-end test against the OpenRouter API
+- ⏳ Marketplace / npm publish
 
 ## License
 
-TBD.
+MIT — see [LICENSE](LICENSE).
