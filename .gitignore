@@ -1,0 +1,23 @@
+node_modules/
+dist/
+coverage/
+.vitest/
+.turbo/
+.next/
+build/
+
+*.tsbuildinfo
+*.log
+
+.env
+.env.local
+.env.*.local
+
+.DS_Store
+.idea/
+.vscode/
+
+.claude/settings.local.json
+
+# Local model probe artifacts
+/tmp/openrouter_models.json

@@ -1,0 +1,27 @@
+{
+  "name": "openrouter-mcp",
+  "version": "0.1.0",
+  "description": "Free OpenRouter models as MCP tools for Claude Code. 22 named tools — summarize, extract, classify, OCR, code explanation, commit messages, and more — backed by curated free models. Paid options for image/audio/video gen are opt-in per call.",
+  "author": {
+    "name": "JescaLyn"
+  },
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "openrouter",
+    "models",
+    "free",
+    "delegation",
+    "leaf-node-tasks"
+  ],
+  "mcpServers": "./.mcp.json",
+  "userConfig": {
+    "openrouter_api_key": {
+      "type": "string",
+      "title": "OpenRouter API Key",
+      "description": "Get one at https://openrouter.ai/keys. Used for all OpenRouter API calls. Stored securely in the system keychain.",
+      "sensitive": true,
+      "required": true
+    }
+  }
+}
