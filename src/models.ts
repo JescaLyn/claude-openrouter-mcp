@@ -83,7 +83,7 @@ export const TASK_MODELS: Record<TaskType, TaskModelChain> = {
   },
   translate: {
     free_primary: 'google/gemma-3-27b-it',
-    free_fallback: 'tencent/hy3-preview',
+    free_fallback: 'meta-llama/llama-3.3-70b-instruct',
     paid_escalation: 'google/gemini-2.5-flash',
     paid_cost_note: 'gemini-2.5-flash · ~$0.0024 per 2K-in/500-out call',
   },

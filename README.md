@@ -1,47 +1,91 @@
 # openrouter-mcp
 
-MCP server (also packaged as a Claude Code plugin) that exposes OpenRouter models as named tools for Claude Code sessions. Lets Claude delegate routine, leaf-node work — summarize, extract, classify, OCR, code explanation, commit messages, etc. — to free OpenRouter models to save context and tokens. Paid options exist for capabilities with no free path (image / audio / video generation, audio transcription) but require explicit per-call user approval.
-
-> **Status: v0.1.0 draft.** All 22 tools are implemented and unit-tested. The plugin manifest is in place. End-to-end live testing against OpenRouter is the next step; see `docs/PLAN.md` for the build phase status.
-
-## Why
-
-Claude Code sessions are excellent for orchestration, reasoning, and multi-step work. But sessions burn context on routine leaf-node tasks (summarizing search results, classifying log lines, OCR-ing a screenshot) that a small free model handles fine. This MCP server is the delegation surface: Claude calls a named tool, a free OpenRouter model does the work, the result comes back. No loss of orchestration, lower token cost, more headroom for Claude to do what it's actually good at.
-
-## Operating Principle
-
-**Free OpenRouter is the default. Paid is a rare, user-approved exception.** This server is not trying to replace Claude or run side-by-side as a second brain — it's specifically for the work that doesn't need a frontier model.
+MCP server / Claude Code plugin that lets Claude delegate routine work — summarize, extract, classify, OCR, code explanation, commit messages, image/audio/video gen — to OpenRouter models. Free for most tasks; paid options gated behind explicit per-call user approval.
 
 ## Quick Start
 
-### Option 1 — Install as a Claude Code plugin (recommended)
+### 1. Get an OpenRouter API key
+
+Sign up at [openrouter.ai/keys](https://openrouter.ai/keys). The free tier is enough for most usage; one-time $10 top-up raises daily limits from 50 to 1000 requests.
+
+### 2. Install
+
+**Option A — Claude Code plugin (coming soon).** Once published to npm, install via marketplace. The plugin prompts for your OpenRouter API key during install and stores it in the macOS keychain. For now, use Option B.
 
 ```bash
-# Coming soon: marketplace install command
-claude plugin install openrouter-mcp@<source>
+# Not yet available; check back after npm publish
+# claude plugin install openrouter-mcp
 ```
 
-The plugin prompts for your OpenRouter API key at install time and stores it in your system keychain. Get a key at [openrouter.ai/keys](https://openrouter.ai/keys).
-
-### Option 2 — Standalone MCP server (npm)
+**Option B — Local development / standalone setup.** Build from source and register the server with `claude mcp add`. The goal is to keep your API key out of `~/.claude.json` so Claude cannot read it — both credential store approaches below achieve this.
 
 ```bash
-npm install -g openrouter-mcp
+# Clone, install, and build
+git clone <repo> && cd openrouter-mcp
+npm install && npm run build
 ```
 
-Add to your `.mcp.json`:
+**With macOS Keychain:**
 
-```jsonc
-{
-  "mcpServers": {
-    "openrouter": {
-      "command": "npx",
-      "args": ["openrouter-mcp"],
-      "env": { "OPENROUTER_API_KEY": "your-key-here" }
-    }
-  }
-}
+```bash
+# 1. Store the key in Keychain (paste your API key when prompted)
+security add-generic-password -a "openrouter-mcp" -s "openrouter-api-key" -w
+
+# 2. Create a helper script (~/.claude/helpers/start-openrouter-mcp.sh)
+mkdir -p ~/.claude/helpers
+cat > ~/.claude/helpers/start-openrouter-mcp.sh << 'EOF'
+#!/bin/bash
+export OPENROUTER_API_KEY="$(security find-generic-password -a "openrouter-mcp" -s "openrouter-api-key" -w)"
+exec node /absolute/path/to/openrouter-mcp/dist/server.js
+EOF
+chmod +x ~/.claude/helpers/start-openrouter-mcp.sh
+
+# 3. Register the server (replace /absolute/path with actual path, e.g. /Users/you/dev/openrouter-mcp)
+claude mcp add -s user openrouter -- /Users/you/.claude/helpers/start-openrouter-mcp.sh
+
+# 4. Verify it registered
+claude mcp list
 ```
+
+The key stays in Keychain (macOS-native, no passphrase needed). The helper script retrieves it at server-startup time, injecting it directly into the server process environment. Claude never sees the key — `~/.claude.json` only stores the path to the helper script.
+
+**After step 3:** start a new Claude Code session, or type `/mcp` in an active session to reload. Tools won't appear until one of those two things happens.
+
+**View, update, or delete the stored key:**
+```bash
+security find-generic-password -a "openrouter-mcp" -s "openrouter-api-key" -w   # view
+security add-generic-password -a "openrouter-mcp" -s "openrouter-api-key" -w -U # update
+security delete-generic-password -a "openrouter-mcp" -s "openrouter-api-key"    # delete
+```
+
+**Scope reference** (`-s` flag):
+
+| Scope | When it loads |
+|---|---|
+| `local` (default) | Only when Claude is opened from this project's directory |
+| `user` | Every Claude Code session, any directory |
+| `project` | Saved to `.mcp.json`; loads for anyone who clones the repo |
+
+### 3. Verify
+
+In a Claude Code session:
+
+> "Use the openrouter list_free_models tool to show me what's available."
+
+You should see ~28 free models grouped by capability. If you get `MISSING_CREDENTIAL`, the key isn't reaching the server — re-check your `claude mcp add` command and run `claude mcp list` to verify the server registered correctly.
+
+## What Claude Sees vs. Doesn't See
+
+- **Keychain approach (recommended):** Claude never sees the key. `~/.claude.json` stores the path to a helper script only. The helper script runs at server-spawn time; the key is retrieved from Keychain and injected directly into the server process environment, never entering Claude's context.
+- **`-e` flag approach (testing only):** The key is written to `~/.claude.json` in plaintext. Claude can read that file. Use this only for local testing.
+- **Plugin (once published):** Key is handled via `userConfig` and stored securely by Claude Code; Claude never sees the plaintext value.
+- The project's `.claude/settings.local.json` denies `Bash(security *)`, `Read(.env*)`, and `printenv OPENROUTER*` to prevent accidental exfiltration via tool calls.
+
+## Why this MCP exists
+
+Claude Code sessions are excellent for orchestration, reasoning, and multi-step work — but burn context on routine leaf-node tasks (summarizing search results, classifying log lines, OCR-ing a screenshot) that a small free model handles fine. This server is the delegation surface: Claude calls a named tool, a free OpenRouter model does the work, the result comes back. No loss of orchestration, lower token cost, more headroom for Claude to do what it's actually good at.
+
+**Operating principle: free is the default. Paid is a rare, user-approved exception.**
 
 ## Tools
 
@@ -176,15 +220,9 @@ Prints a diff between `src/models.ts` and the live free list, surfaces newly-add
 
 See [`docs/MODELS.md`](docs/MODELS.md) for the full refresh procedure and the **pricing trap** (image/audio/video models legitimately show $0/$0 in OpenRouter's UI token columns; the actual price lives in `pricing.image_output`, `pricing.audio`, or `pricing.video_output`).
 
-## Build phase status
+## Status
 
-- ✅ **Phase 0** — Plugin scaffold (TS + MCP SDK + `.claude-plugin/plugin.json` with `userConfig.openrouter_api_key`)
-- ✅ **Phase 1** — Core client + foundation tools (`query_model`, `query_free`, `list_free_models`)
-- ✅ **Phase 2** — All 19 wrapper tools (text, code, free input-processing, paid generation)
-- ✅ **Phase 3** — Docs polish
-- ⏳ **Phase 4** — Code review + security review
-- ⏳ Live end-to-end test against the OpenRouter API
-- ⏳ Marketplace / npm publish
+All 22 tools are implemented and security-reviewed. Live end-to-end testing and npm/marketplace publish are pending.
 
 ## License
 
