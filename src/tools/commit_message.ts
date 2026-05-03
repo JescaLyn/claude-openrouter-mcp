@@ -1,9 +1,9 @@
 /**
  * commit_message — generate a single-line commit message from a staged diff.
  *
- * Routes through the `commit_message` task chain. Style is HARDCODED in the
- * system prompt and not user-configurable: past-tense verbs, sentence case,
- * ending with a period, parallel structure for multi-change, plain ASCII only.
+ * Routes through the `commit_message` task chain. Default style: past-tense
+ * verbs, sentence case, ending with a period, parallel structure for
+ * multi-change, plain ASCII only. Pass `instructions` to append custom style rules.
  *
  * If `scope_hint` is provided, it is prepended to the user message as guidance
  * (NOT as a conventional-commit prefix).
@@ -31,13 +31,17 @@ const SYSTEM_PROMPT = [
 export const definition = {
   name: 'commit_message',
   description:
-    "Generate a commit message from a staged diff via a curated free model. Style is FIXED (no `style` parameter): past-tense verbs, sentence case, ends with a period, parallel structure for multi-change ('Fixed X, added Y, and removed Z.'), plain ASCII, 'and' instead of symbols, describes what and why (not where). Use after staging changes; pass `git diff --cached` output as `diff`. NOT for: writing PR descriptions or release notes — use Claude directly there.",
+    "Generate a commit message from a staged diff via a curated free model. Default style: past-tense verbs, sentence case, ends with a period, parallel structure for multi-change ('Fixed X, added Y, and removed Z.'), plain ASCII, 'and' instead of symbols, describes what and why (not where). Pass `instructions` to append custom style rules on top of the default. Use after staging changes; pass `git diff --cached` output as `diff`. NOT for: writing PR descriptions or release notes — use Claude directly there.",
   inputSchema: {
     type: 'object',
     properties: {
       diff: {
         type: 'string',
         description: 'Staged diff (output of `git diff --cached`).',
+      },
+      instructions: {
+        type: 'string',
+        description: 'Custom style instructions appended to the default system prompt.',
       },
       scope_hint: {
         type: 'string',
@@ -59,6 +63,7 @@ export const definition = {
 
 const Args = z.object({
   diff: z.string().min(1),
+  instructions: z.string().min(1).optional(),
   scope_hint: z.string().optional(),
   model: z.string().optional(),
   allow_paid: z.boolean().default(false),
@@ -85,7 +90,9 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
   const instruction = instructionParts.join('\n');
 
   const messages = composeMessages({
-    system: SYSTEM_PROMPT,
+    system: args.instructions
+      ? `${SYSTEM_PROMPT}\n\nAdditional style instructions:\n${args.instructions}`
+      : SYSTEM_PROMPT,
     instruction,
     untrusted: args.diff,
   });

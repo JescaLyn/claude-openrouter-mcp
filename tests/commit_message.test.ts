@@ -61,4 +61,16 @@ describe('commit_message handler', () => {
     const userMsg = callArgs.messages.find((m: { role: string }) => m.role === 'user');
     expect(userMsg.content).toContain('Scope hint: auth module');
   });
+
+  it('appends custom instructions to the default system prompt when provided', async () => {
+    const { ctx, chain } = stubCtx();
+    await handler(
+      { diff: 'diff --git a/foo b/foo\n+hello', instructions: 'Custom style rules.' },
+      ctx,
+    );
+    const callArgs = chain.mock.calls[0]?.[0];
+    const sysMsg = callArgs.messages.find((m: { role: string }) => m.role === 'system');
+    expect(sysMsg.content).toContain('Write a single-line git commit message');
+    expect(sysMsg.content).toContain('Custom style rules.');
+  });
 });
