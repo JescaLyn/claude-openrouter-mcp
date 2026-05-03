@@ -49,6 +49,50 @@ OpenRouter's UI shows columns "Input ($/M)" and "Output ($/M)". **These are toke
 
 A model is truly free **only when all six pricing fields are zero or absent** AND `endpoint.is_free === true` in the frontend response. Don't trust the UI columns alone.
 
+## Multimodal API Format (Images & Videos)
+
+OpenRouter uses a **unified multimodal format** that differs from Anthropic's vision API. When sending images or videos:
+
+### ✅ Correct Format
+```json
+{
+  "messages": [{
+    "role": "user",
+    "content": [
+      { "type": "text", "text": "Your prompt here" },
+      {
+        "type": "image_url",
+        "image_url": { "url": "data:image/jpeg;base64,..." }
+      }
+    ]
+  }]
+}
+```
+
+### ❌ Wrong Format (Anthropic-style)
+```json
+{
+  "messages": [{
+    "role": "user",
+    "content": [
+      { "type": "text", "text": "Your prompt here" },
+      {
+        "type": "image",
+        "source": { "type": "base64", "media_type": "image/jpeg", "data": "..." }
+      }
+    ]
+  }]
+}
+```
+
+**Critical details:**
+1. Content array: **text first, then media**
+2. Image: use `image_url` (not `image`); video: `video_url` (not `video`)
+3. URL format: `data:{mime};base64,{encoded_data}` for local files
+4. Supported formats: PNG, JPEG, WebP, GIF (images); MP4, MOV, WebM (videos)
+
+See `docs/MULTIMODAL_FORMAT.md` for full debugging guide and why format matters.
+
 ## How to Refresh the Free Model List
 
 When `src/models.ts` rots and tools start returning `MODEL_NOT_FOUND`:

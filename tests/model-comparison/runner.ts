@@ -3,7 +3,7 @@
  * Executes test cases against specified models and collects results.
  *
  * Usage:
- *   npm run test:models [--group code_reasoning|classification|long_context_reasoning|multimodal_video]
+ *   npm run test:models [--group code_reasoning|classification|long_context_reasoning|analyze_image|analyze_video|multimodal_video]
  *   npm run test:models --all (runs all comparison groups)
  *   npm run test:models --group code_reasoning --save (saves results to file)
  */
@@ -15,6 +15,35 @@ import { TEST_CASES, MODEL_COMPARISON_GROUPS, type TestCase } from './test-cases
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+/**
+ * Get MIME type from fixture path.
+ */
+function getMediaType(fixturePath: string, fixtureType: 'image' | 'video'): string {
+  const ext = path.extname(fixturePath).toLowerCase();
+  const mimeMap: Record<string, string> = {
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.gif': 'image/gif',
+    '.webp': 'image/webp',
+    '.mp4': 'video/mp4',
+    '.mov': 'video/quicktime',
+    '.webm': 'video/webm',
+  };
+  return mimeMap[ext] || (fixtureType === 'image' ? 'image/jpeg' : 'video/mp4');
+}
+
+/**
+ * Load fixture file and encode as base64 data URL.
+ */
+function loadFixture(fixturePath: string, fixtureType: 'image' | 'video'): string {
+  const fullPath = path.join(__dirname, '..', '..', fixturePath);
+  const fileBuffer = fs.readFileSync(fullPath);
+  const base64 = fileBuffer.toString('base64');
+  const mimeType = getMediaType(fixturePath, fixtureType);
+  return `data:${mimeType};base64,${base64}`;
+}
 
 interface TestResult {
   test_id: string;
@@ -82,7 +111,38 @@ async function runTestAgainstModel(
       },
       body: JSON.stringify({
         model,
-        messages: [{ role: 'user', content: testCase.prompt }],
+        messages: [
+          {
+            role: 'user',
+            content: testCase.fixture_path
+              ? (() => {
+                  const fixtureType = testCase.fixture_type;
+                  if (!fixtureType) {
+                    console.error(
+                      `[runner] fixture_path set but fixture_type missing on test ${testCase.id}; skipping fixture`
+                    );
+                    return testCase.prompt;
+                  }
+                  return [
+                    { type: 'text', text: testCase.prompt },
+                    fixtureType === 'image'
+                      ? {
+                          type: 'image_url',
+                          image_url: {
+                            url: loadFixture(testCase.fixture_path!, 'image'),
+                          },
+                        }
+                      : {
+                          type: 'video_url',
+                          video_url: {
+                            url: loadFixture(testCase.fixture_path!, 'video'),
+                          },
+                        },
+                  ];
+                })()
+              : testCase.prompt,
+          },
+        ],
         temperature: 0.3,
         max_tokens: 2000,
       }),
@@ -317,6 +377,8 @@ async function main() {
       console.log('  npm run test:models --group classification [--save]');
       console.log('  npm run test:models --group long_context_reasoning [--save]');
       console.log('  npm run test:models --group multimodal_video [--save]');
+      console.log('  npm run test:models --group analyze_image [--save]');
+      console.log('  npm run test:models --group analyze_video [--save]');
       process.exit(1);
     }
   }

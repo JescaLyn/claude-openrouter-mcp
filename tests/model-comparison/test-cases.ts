@@ -5,10 +5,12 @@
 
 export interface TestCase {
   id: string;
-  category: 'code_reasoning' | 'classification' | 'long_context_reasoning' | 'multimodal_video';
+  category: 'code_reasoning' | 'classification' | 'long_context_reasoning' | 'multimodal_video' | 'analyze_image' | 'analyze_video';
   title: string;
   description: string;
   prompt: string;
+  fixture_path?: string; // Path to image/video fixture
+  fixture_type?: 'image' | 'video'; // Content type for multimodal tests
   expected_qualities: string[];
   eval_criteria: {
     accuracy?: string;
@@ -285,6 +287,174 @@ Analyze:
       reasoning: 'Justified inference from visual cues',
     },
   },
+
+  // ── Image Analysis ──────────────────────────────────────────────────────
+  {
+    id: 'analyze_img_01',
+    category: 'analyze_image',
+    title: 'Portrait Analysis',
+    description: 'Analyze facial features, expression, and context from a portrait photo',
+    prompt: `Analyze this portrait image in detail:
+1. Physical description (age estimate, gender expression, distinctive features)
+2. Emotional state or expression
+3. Clothing/styling context (casual/formal/creative)
+4. Lighting and composition quality
+5. Overall mood conveyed
+
+Be specific and objective.`,
+    fixture_path: 'tests/fixture/vera.jpeg',
+    fixture_type: 'image',
+    expected_qualities: [
+      'Accurate physical description',
+      'Correct emotional tone identification',
+      'Context-appropriate analysis',
+      'Detailed observation of visual elements',
+    ],
+    eval_criteria: {
+      accuracy: 'Description matches visible features',
+      completeness: 'All aspects analyzed',
+      reasoning: 'Justified observations from visual cues',
+    },
+  },
+  {
+    id: 'analyze_img_02',
+    category: 'analyze_image',
+    title: 'Animation/Art Style Analysis (GIF)',
+    description: 'Analyze artistic style, technique, and creative elements in visual art',
+    prompt: `Analyze the artistic style and creative elements in this image:
+1. Art style/genre (realistic, anime, cartoon, abstract, etc)
+2. Color palette and mood
+3. Artistic technique evident
+4. Subject and composition
+5. Likely creator intent or message
+
+Explain what makes this style distinctive.`,
+    fixture_path: 'tests/fixture/beesknees.gif',
+    fixture_type: 'image',
+    expected_qualities: [
+      'Correct style classification',
+      'Accurate color and mood analysis',
+      'Technical observations about execution',
+      'Insightful intent interpretation',
+    ],
+    eval_criteria: {
+      accuracy: 'Style correctly identified',
+      completeness: 'All visual elements analyzed',
+      reasoning: 'Sound interpretation of artistic choices',
+    },
+  },
+  {
+    id: 'analyze_img_03',
+    category: 'analyze_image',
+    title: 'Cartoon/Character Analysis (WebP)',
+    description: 'Analyze cartoon/character design, expressions, and artistic elements',
+    prompt: `Analyze this cartoon or character image:
+1. Art style and character design approach
+2. Character expression and body language
+3. Color scheme and how it affects mood
+4. Technical quality and detail level
+5. What the character conveys emotionally
+
+Is this professional-grade art? Why or why not?`,
+    fixture_path: 'tests/fixture/fox-alphabet.webp',
+    fixture_type: 'image',
+    expected_qualities: [
+      'Correct art style identification',
+      'Accurate emotional tone',
+      'Technical quality assessment',
+      'Design analysis',
+    ],
+    eval_criteria: {
+      accuracy: 'Character and style correctly identified',
+      completeness: 'Design elements thoroughly analyzed',
+      reasoning: 'Sound technical and artistic assessment',
+    },
+  },
+  {
+    id: 'analyze_img_04',
+    category: 'analyze_image',
+    title: 'Person/Portrait Photography (JPEG)',
+    description: 'Analyze a photographic portrait with focus on composition and lighting',
+    prompt: `Analyze this photograph:
+1. Subject: Who or what is in the photo? Age estimate, expression?
+2. Photography technique: Lighting, focus, depth of field
+3. Composition: Rule of thirds, framing, background
+4. Mood/atmosphere: What feeling does it convey?
+5. Technical quality: Is this professional photography?
+
+What makes this a compelling (or not compelling) image?`,
+    fixture_path: 'tests/fixture/phantom.jpeg',
+    fixture_type: 'image',
+    expected_qualities: [
+      'Accurate subject description',
+      'Correct technical analysis',
+      'Sound composition critique',
+      'Valid quality assessment',
+    ],
+    eval_criteria: {
+      accuracy: 'Subject and technique correctly identified',
+      completeness: 'All aspects of photo analyzed',
+      reasoning: 'Sound photographic analysis',
+    },
+  },
+
+  // ── Video Analysis ──────────────────────────────────────────────────────
+  {
+    id: 'analyze_vid_01',
+    category: 'analyze_video',
+    title: 'Talk Show Analysis (MP4)',
+    description: 'Analyze video content, tone, and production from a talk show clip',
+    prompt: `Analyze this video clip:
+1. What is the primary subject/topic being discussed?
+2. Tone and energy: Is it serious, humorous, dramatic, or mixed?
+3. Setting: Describe the environment and production setup
+4. Key moments: What are the main events or points made?
+5. Overall purpose: Entertainment, education, satire, news?
+6. Production quality and technique
+
+What is the main message or point of this clip?`,
+    fixture_path: 'tests/fixture/Trump 2.0： Last Week Tonight with John Oliver (HBO) [cw0F8G4-dMw].mp4',
+    fixture_type: 'video',
+    expected_qualities: [
+      'Correct content and topic identification',
+      'Accurate tone and intent assessment',
+      'Sound analysis of production style',
+      'Understanding of purpose and message',
+    ],
+    eval_criteria: {
+      accuracy: 'Content and tone correctly identified',
+      completeness: 'All key elements covered',
+      reasoning: 'Sound analysis of media intent and style',
+    },
+  },
+  {
+    id: 'analyze_vid_02',
+    category: 'analyze_video',
+    title: 'Motion Graphics/Animation (MOV)',
+    description: 'Analyze animation style, motion design, and visual effects',
+    prompt: `Analyze this animated video:
+1. Animation style: Is it 2D, 3D, stop-motion, motion graphics, etc?
+2. Visual elements: What is shown? Objects, characters, text, effects?
+3. Motion quality: Smoothness, timing, pacing
+4. Color palette and visual aesthetics
+5. Apparent purpose: What is this video meant to communicate or demonstrate?
+6. Technical execution quality
+
+Is this professional-quality motion design?`,
+    fixture_path: 'tests/fixture/Generate Personality v1.mov',
+    fixture_type: 'video',
+    expected_qualities: [
+      'Correct animation style identification',
+      'Accurate visual element description',
+      'Sound motion quality assessment',
+      'Understanding of purpose and intent',
+    ],
+    eval_criteria: {
+      accuracy: 'Animation style and elements correctly identified',
+      completeness: 'All motion and design aspects analyzed',
+      reasoning: 'Sound technical assessment of animation quality',
+    },
+  },
 ];
 
 export const MODEL_COMPARISON_GROUPS = {
@@ -303,5 +473,13 @@ export const MODEL_COMPARISON_GROUPS = {
   multimodal_video: {
     models: ['nvidia/nemotron-nano-12b-v2-vl', 'google/gemma-4-31b-it'],
     test_ids: ['multimodal_01', 'multimodal_02'],
+  },
+  analyze_image: {
+    models: ['nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free', 'nvidia/nemotron-nano-12b-v2-vl'],
+    test_ids: ['analyze_img_01', 'analyze_img_02', 'analyze_img_03', 'analyze_img_04'],
+  },
+  analyze_video: {
+    models: ['nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free', 'nvidia/nemotron-nano-12b-v2-vl'],
+    test_ids: ['analyze_vid_01', 'analyze_vid_02'],
   },
 };
