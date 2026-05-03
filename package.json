@@ -13,7 +13,6 @@
     ".claude-plugin",
     ".mcp.json",
     "README.md",
-    "CLAUDE.md",
     "LICENSE"
   ],
   "scripts": {
@@ -50,9 +49,14 @@
     "ai",
     "llm-delegation"
   ],
+  "author": "JescaLyn (https://github.com/JescaLyn)",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JescaLyn/openrouter-mcp.git"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/JescaLyn/openrouter-mcp/issues"
+  },
+  "homepage": "https://github.com/JescaLyn/openrouter-mcp#readme"
 }

@@ -1,7 +1,8 @@
 {
   "mcpServers": {
     "openrouter": {
-      "command": "openrouter-mcp",
+      "command": "node",
+      "args": ["./dist/server.js"],
       "env": {}
     }
   }

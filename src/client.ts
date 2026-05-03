@@ -401,7 +401,7 @@ function freeExhaustedError(chain: TaskModelChain): ErrorEnvelope['error'] {
  * A future pass can wire in pricing from the probe response.
  */
 function estimateCost(_model: string, _tokensIn: number, _tokensOut: number): number {
-  // TODO(Phase 1.5): wire probe pricing into per-call cost estimation.
+  // TODO: wire probe pricing into per-call cost estimation.
   // For now, we surface cost via the cost_breakdown string in error envelopes.
   return 0;
 }

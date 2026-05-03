@@ -10,14 +10,9 @@ Sign up at [openrouter.ai/keys](https://openrouter.ai/keys). The free tier is en
 
 ### 2. Install
 
-**Option A — Claude Code plugin (coming soon).** Once published to npm, install via marketplace. The plugin prompts for your OpenRouter API key during install and stores it in the macOS keychain. For now, use Option B.
+**Option A — Claude Code plugin (planned).** Once published to npm, install via marketplace. The plugin prompts for your OpenRouter API key and stores it securely. Not yet available — use Option B for now.
 
-```bash
-# Not yet available; check back after npm publish
-# claude plugin install openrouter-mcp
-```
-
-**Option B — Local development / standalone setup.** Build from source and register the server with `claude mcp add`. The goal is to keep your API key out of `~/.claude.json` so Claude cannot read it — both credential store approaches below achieve this.
+**Option B — Build from source.** Build from source and register the server with `claude mcp add`. The goal is to keep your API key out of `~/.claude.json` so Claude cannot read it — both credential store approaches below achieve this.
 
 ```bash
 # Clone, install, and build
@@ -242,10 +237,6 @@ npm run probe:models
 Prints a diff between `src/models.ts` and the live free list, surfaces newly-added free options, and writes a fresh offline snapshot to `src/models.snapshot.json`. Then update the affected entry in `src/models.ts`.
 
 See [`docs/MODELS.md`](docs/MODELS.md) for the full refresh procedure and the **pricing trap** (image/audio/video models legitimately show $0/$0 in OpenRouter's UI token columns; the actual price lives in `pricing.image_output`, `pricing.audio`, or `pricing.video_output`).
-
-## Status
-
-All 22 tools are implemented and security-reviewed. Live end-to-end testing and npm/marketplace publish are pending.
 
 ## License
 

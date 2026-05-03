@@ -39,7 +39,7 @@ You'll receive:
 
 ## Requirements
 
-- OpenRouter API key in Keychain (configured via helper script)
+- `OPENROUTER_API_KEY` in environment or macOS Keychain (see DEVELOPMENT.md)
 - `npm run build` completed (tests use `dist/server.js`)
 
 ---
