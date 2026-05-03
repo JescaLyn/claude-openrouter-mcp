@@ -24,3 +24,13 @@ build/
 
 # Test comparison results (ephemeral, regenerated per run)
 tests/model-comparison/results/
+
+# Test fixtures — bring your own (see tests/fixture/README.md)
+tests/fixture/*.jpg
+tests/fixture/*.jpeg
+tests/fixture/*.png
+tests/fixture/*.gif
+tests/fixture/*.webp
+tests/fixture/*.mp4
+tests/fixture/*.mov
+tests/fixture/*.webm

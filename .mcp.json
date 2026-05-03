@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "openrouter": {
+      "command": "openrouter-mcp",
+      "env": {}
+    }
+  }
+}

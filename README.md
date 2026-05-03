@@ -21,11 +21,32 @@ Sign up at [openrouter.ai/keys](https://openrouter.ai/keys). The free tier is en
 
 ```bash
 # Clone, install, and build
-git clone <repo> && cd openrouter-mcp
+git clone https://github.com/JescaLyn/openrouter-mcp && cd openrouter-mcp
 npm install && npm run build
 ```
 
-**With macOS Keychain:**
+**Option B1 — Environment variable (all platforms):**
+
+```bash
+# 1. Create a helper script that reads from your environment
+mkdir -p ~/.claude/helpers
+cat > ~/.claude/helpers/start-openrouter-mcp.sh << 'EOF'
+#!/bin/bash
+# OPENROUTER_API_KEY is inherited from the shell environment at launch time.
+exec node /absolute/path/to/openrouter-mcp/dist/server.js
+EOF
+chmod +x ~/.claude/helpers/start-openrouter-mcp.sh
+
+# 2. Register the server
+claude mcp add -s user openrouter -- /path/to/.claude/helpers/start-openrouter-mcp.sh
+
+# 3. Export your key in your shell profile (~/.bashrc, ~/.zshrc, etc.)
+export OPENROUTER_API_KEY="sk-or-..."
+```
+
+The key must be present in the shell environment when Claude Code launches.
+
+**Option B2 — macOS Keychain (recommended on Mac):**
 
 ```bash
 # 1. Store the key in Keychain (paste your API key when prompted)
@@ -40,23 +61,23 @@ exec node /absolute/path/to/openrouter-mcp/dist/server.js
 EOF
 chmod +x ~/.claude/helpers/start-openrouter-mcp.sh
 
-# 3. Register the server (replace /absolute/path with actual path, e.g. /Users/you/dev/openrouter-mcp)
-claude mcp add -s user openrouter -- /Users/you/.claude/helpers/start-openrouter-mcp.sh
+# 3. Register the server (replace /absolute/path with your actual path)
+claude mcp add -s user openrouter -- /path/to/.claude/helpers/start-openrouter-mcp.sh
 
 # 4. Verify it registered
 claude mcp list
 ```
 
-The key stays in Keychain (macOS-native, no passphrase needed). The helper script retrieves it at server-startup time, injecting it directly into the server process environment. Claude never sees the key — `~/.claude.json` only stores the path to the helper script.
+The key stays in Keychain (macOS-native, no passphrase needed). Claude never sees the key — `~/.claude.json` only stores the path to the helper script.
 
-**After step 3:** start a new Claude Code session, or type `/mcp` in an active session to reload. Tools won't appear until one of those two things happens.
-
-**View, update, or delete the stored key:**
+**View, update, or delete the stored key (macOS):**
 ```bash
 security find-generic-password -a "openrouter-mcp" -s "openrouter-api-key" -w   # view
 security add-generic-password -a "openrouter-mcp" -s "openrouter-api-key" -w -U # update
 security delete-generic-password -a "openrouter-mcp" -s "openrouter-api-key"    # delete
 ```
+
+**After registering:** start a new Claude Code session, or type `/mcp` in an active session to reload. Tools won't appear until one of those two things happens.
 
 **Scope reference** (`-s` flag):
 
@@ -77,7 +98,7 @@ You should see ~28 free models grouped by capability. If you get `MISSING_CREDEN
 ## What Claude Sees vs. Doesn't See
 
 - **Keychain approach (recommended):** Claude never sees the key. `~/.claude.json` stores the path to a helper script only. The helper script runs at server-spawn time; the key is retrieved from Keychain and injected directly into the server process environment, never entering Claude's context.
-- **`-e` flag approach (testing only):** The key is written to `~/.claude.json` in plaintext. Claude can read that file. Use this only for local testing.
+- **`-e` flag approach (testing only):** Passing `-e OPENROUTER_API_KEY=...` to `claude mcp add` writes the key to `~/.claude.json` in plaintext. Claude can read that file. Use this only for local testing.
 - **Plugin (once published):** Key is handled via `userConfig` and stored securely by Claude Code; Claude never sees the plaintext value.
 - The project's `.claude/settings.local.json` denies `Bash(security *)`, `Read(.env*)`, and `printenv OPENROUTER*` to prevent accidental exfiltration via tool calls.
 
@@ -177,14 +198,16 @@ For the third example, Claude will first call `generate_image` *without* `allow_
 ## Development
 
 ```bash
-git clone <repo>
+git clone https://github.com/JescaLyn/openrouter-mcp
 cd openrouter-mcp
 npm install
 npm run build       # tsc → dist/
-npm test            # vitest run, all tests
+npm test            # vitest run, all tests (no API key needed)
 npm run typecheck   # tsc --noEmit
 npm run probe:models  # refresh src/models.snapshot.json against the live API
 ```
+
+The regular test suite runs entirely against mocked clients — no API key required. For the live model comparison suite (`npm run test:models`), you also need an `OPENROUTER_API_KEY` and test fixture files — see [`tests/fixture/README.md`](tests/fixture/README.md).
 
 Project layout:
 

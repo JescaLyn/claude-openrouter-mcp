@@ -36,9 +36,11 @@ function getMediaType(fixturePath: string, fixtureType: 'image' | 'video'): stri
 
 /**
  * Load fixture file and encode as base64 data URL.
+ * Returns null if the file does not exist (test will be skipped).
  */
-function loadFixture(fixturePath: string, fixtureType: 'image' | 'video'): string {
+function loadFixture(fixturePath: string, fixtureType: 'image' | 'video'): string | null {
   const fullPath = path.join(__dirname, '..', '..', fixturePath);
+  if (!fs.existsSync(fullPath)) return null;
   const fileBuffer = fs.readFileSync(fullPath);
   const base64 = fileBuffer.toString('base64');
   const mimeType = getMediaType(fixturePath, fixtureType);
@@ -100,6 +102,34 @@ async function runTestAgainstModel(
   const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
   const timeoutMs = parseInt(process.env.TEST_TIMEOUT_MS ?? '30000', 10);
 
+  // Build message content; bail early if a required fixture is missing.
+  let messageContent: string | Array<{ type: string; [k: string]: unknown }>;
+  if (testCase.fixture_path) {
+    const fixtureType = testCase.fixture_type;
+    if (!fixtureType) {
+      console.error(`[runner] fixture_path set but fixture_type missing on test ${testCase.id}; skipping fixture`);
+      messageContent = testCase.prompt;
+    } else {
+      const dataUrl = loadFixture(testCase.fixture_path, fixtureType);
+      if (!dataUrl) {
+        console.warn(`[runner] fixture not found: ${testCase.fixture_path} — skipping test ${testCase.id}. See tests/fixture/README.md.`);
+        return {
+          test_id: testCase.id, model, category: testCase.category, title: testCase.title,
+          timestamp: new Date().toISOString(), latency_ms: 0, tokens_in: 0, tokens_out: 0,
+          cost_usd: 0, output: '', output_length: 0, error: 'SKIPPED: fixture not found',
+        };
+      }
+      messageContent = [
+        { type: 'text', text: testCase.prompt },
+        fixtureType === 'image'
+          ? { type: 'image_url', image_url: { url: dataUrl } }
+          : { type: 'video_url', video_url: { url: dataUrl } },
+      ];
+    }
+  } else {
+    messageContent = testCase.prompt;
+  }
+
   try {
     const response = await fetch(apiUrl, {
       signal: AbortSignal.timeout(timeoutMs),
@@ -111,38 +141,7 @@ async function runTestAgainstModel(
       },
       body: JSON.stringify({
         model,
-        messages: [
-          {
-            role: 'user',
-            content: testCase.fixture_path
-              ? (() => {
-                  const fixtureType = testCase.fixture_type;
-                  if (!fixtureType) {
-                    console.error(
-                      `[runner] fixture_path set but fixture_type missing on test ${testCase.id}; skipping fixture`
-                    );
-                    return testCase.prompt;
-                  }
-                  return [
-                    { type: 'text', text: testCase.prompt },
-                    fixtureType === 'image'
-                      ? {
-                          type: 'image_url',
-                          image_url: {
-                            url: loadFixture(testCase.fixture_path!, 'image'),
-                          },
-                        }
-                      : {
-                          type: 'video_url',
-                          video_url: {
-                            url: loadFixture(testCase.fixture_path!, 'video'),
-                          },
-                        },
-                  ];
-                })()
-              : testCase.prompt,
-          },
-        ],
+        messages: [{ role: 'user', content: messageContent }],
         temperature: 0.3,
         max_tokens: 2000,
       }),

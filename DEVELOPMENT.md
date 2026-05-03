@@ -9,7 +9,7 @@ For **using** the MCP from another project, see [README.md](README.md).
 ### 1. Clone and install
 
 ```bash
-git clone <repo>
+git clone https://github.com/JescaLyn/openrouter-mcp
 cd openrouter-mcp
 npm install
 npm run build
@@ -17,13 +17,19 @@ npm run build
 
 ### 2. Configure API key for local testing
 
-**Recommended approach: macOS Keychain + helper script**
+**All platforms — environment variable:**
 
 ```bash
-# Store the key in Keychain
+export OPENROUTER_API_KEY="sk-or-..."
+```
+
+Add this to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) so it persists across sessions.
+
+**macOS — Keychain (keeps the key out of shell history):**
+
+```bash
 security add-generic-password -a "openrouter-mcp" -s "openrouter-api-key" -w
 
-# Create helper script
 mkdir -p ~/.claude/helpers
 cat > ~/.claude/helpers/start-openrouter-mcp.sh << 'EOF'
 #!/bin/bash
@@ -31,12 +37,10 @@ export OPENROUTER_API_KEY="$(security find-generic-password -a "openrouter-mcp" 
 exec node /absolute/path/to/openrouter-mcp/dist/server.js
 EOF
 chmod +x ~/.claude/helpers/start-openrouter-mcp.sh
-
-# Add to ~/.claude.json manually or via:
-# claude mcp add -s user openrouter -- /Users/you/.claude/helpers/start-openrouter-mcp.sh
+claude mcp add -s user openrouter -- /path/to/.claude/helpers/start-openrouter-mcp.sh
 ```
 
-See [README.md § Setup](README.md#2-install) for details and alternatives.
+See [README.md § Setup](README.md#2-install) for full details, scope flags, and the plugin option.
 
 ## Project Structure
 
