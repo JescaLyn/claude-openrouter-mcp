@@ -1,8 +1,1001 @@
 {
-  "probed_at": "2026-04-27T21:36:21.462Z",
+  "probed_at": "2026-05-23T07:18:26.804Z",
   "source": "frontend",
-  "total": 412,
+  "total": 435,
   "data": [
+    {
+      "id": "qwen/qwen3.7-max",
+      "name": "Qwen: Qwen3.7 Max",
+      "context_length": 1000000,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.0000025,
+        "completion": 0.0000075,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "x-ai/grok-build-0.1",
+      "name": "xAI: Grok Build 0.1",
+      "context_length": 256000,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000001,
+        "completion": 0.000002,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "google/gemini-3.5-flash",
+      "name": "Google: Gemini 3.5 Flash",
+      "context_length": 1048576,
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "file",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.0000015,
+        "completion": 0.000009,
+        "image_output": 0,
+        "audio": 0.000003,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "x-ai/grok-imagine-video",
+      "name": "xAI: Grok Imagine Video",
+      "context_length": 0,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "video"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "x-ai/grok-imagine-image-quality",
+      "name": "xAI: Grok Imagine Image Quality",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00001197604790419162,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "mistralai/voxtral-mini-transcribe",
+      "name": "Mistral: Voxtral Mini Transcribe",
+      "context_length": 0,
+      "input_modalities": [
+        "audio"
+      ],
+      "output_modalities": [
+        "transcription"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.003,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "x-ai/grok-voice-tts-1.0",
+      "name": "xAI: Grok Voice TTS 1.0",
+      "context_length": 15000,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "speech"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000015,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "qwen/qwen3-asr-flash-2026-02-10",
+      "name": "Qwen: Qwen3 ASR Flash",
+      "context_length": 0,
+      "input_modalities": [
+        "audio"
+      ],
+      "output_modalities": [
+        "transcription"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000035,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4.1-pro-vector",
+      "name": "Recraft: Recraft V4.1 Pro Vector",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.0000718562874251497,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4.1-vector",
+      "name": "Recraft: Recraft V4.1 Vector",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00001916167664670659,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4.1-utility-pro",
+      "name": "Recraft: Recraft V4.1 Utility Pro",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00005988023952095808,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4.1-utility",
+      "name": "Recraft: Recraft V4.1 Utility",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00000958083832335329,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4.1-pro",
+      "name": "Recraft: Recraft V4.1 Pro",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00005988023952095808,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4.1",
+      "name": "Recraft: Recraft V4.1",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00000958083832335329,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4-pro-vector",
+      "name": "Recraft: Recraft V4 Pro Vector",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.0000718562874251497,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4-vector",
+      "name": "Recraft: Recraft V4 Vector",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00001916167664670659,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "anthropic/claude-opus-4.7-fast",
+      "name": "Anthropic: Claude Opus 4.7 (Fast)",
+      "context_length": 1000000,
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.00003,
+        "completion": 0.00015,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "perceptron/perceptron-mk1",
+      "name": "Perceptron: Perceptron Mk1",
+      "context_length": 32768,
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 1.5e-7,
+        "completion": 0.0000015,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "inclusionai/ring-2.6-1t",
+      "name": "inclusionAI: Ring-2.6-1T",
+      "context_length": 262144,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 7.5e-8,
+        "completion": 6.25e-7,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4-pro",
+      "name": "Recraft: Recraft V4 Pro",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00005988023952095808,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v4",
+      "name": "Recraft: Recraft V4",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00000958083832335329,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "recraft/recraft-v3",
+      "name": "Recraft: Recraft V3",
+      "context_length": 65536,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "image"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0.00000958083832335329,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "google/gemini-3.1-flash-lite",
+      "name": "Google: Gemini 3.1 Flash Lite",
+      "context_length": 1048576,
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "file",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 2.5e-7,
+        "completion": 0.0000015,
+        "image_output": 0,
+        "audio": 5e-7,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "baidu/cobuddy",
+      "name": "Baidu Qianfan: CoBuddy (free)",
+      "context_length": 131072,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": true,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "openai/gpt-chat-latest",
+      "name": "OpenAI: GPT Chat Latest",
+      "context_length": 400000,
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000005,
+        "completion": 0.00003,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "google/chirp-3",
+      "name": "Google: Chirp 3",
+      "context_length": 0,
+      "input_modalities": [
+        "audio"
+      ],
+      "output_modalities": [
+        "transcription"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.016,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "openai/gpt-4o-mini-transcribe",
+      "name": "OpenAI: GPT-4o Mini Transcribe",
+      "context_length": 128000,
+      "input_modalities": [
+        "audio"
+      ],
+      "output_modalities": [
+        "transcription"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.00000125,
+        "completion": 0.000005,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "openai/whisper-large-v3-turbo",
+      "name": "OpenAI: Whisper Large V3 Turbo",
+      "context_length": 0,
+      "input_modalities": [
+        "audio"
+      ],
+      "output_modalities": [
+        "transcription"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.04,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "openai/whisper-large-v3",
+      "name": "OpenAI: Whisper Large V3",
+      "context_length": 0,
+      "input_modalities": [
+        "audio"
+      ],
+      "output_modalities": [
+        "transcription"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.111,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "x-ai/grok-4.3",
+      "name": "xAI: Grok 4.3",
+      "context_length": 1000000,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.00000125,
+        "completion": 0.0000025,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "ibm-granite/granite-4.1-8b",
+      "name": "IBM: Granite 4.1 8B",
+      "context_length": 131072,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 5e-8,
+        "completion": 1e-7,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "mistralai/mistral-medium-3-5",
+      "name": "Mistral: Mistral Medium 3.5",
+      "context_length": 262144,
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.0000015,
+        "completion": 0.0000075,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "kwaivgi/kling-v3.0-pro",
+      "name": "Kling: Video v3.0 Pro",
+      "context_length": 0,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "video"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "kwaivgi/kling-v3.0-std",
+      "name": "Kling: Video v3.0 Standard",
+      "context_length": 0,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "video"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "openrouter/owl-alpha",
+      "name": "Owl Alpha",
+      "context_length": 1048756,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": true,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+      "context_length": 256000,
+      "input_modalities": [
+        "text",
+        "audio",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": true,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "poolside/laguna-xs.2",
+      "name": "Poolside: Laguna XS.2 (free)",
+      "context_length": 131072,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": true,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "poolside/laguna-m.1",
+      "name": "Poolside: Laguna M.1 (free)",
+      "context_length": 131072,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": true,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "openai/whisper-1",
+      "name": "OpenAI: Whisper 1",
+      "context_length": 0,
+      "input_modalities": [
+        "audio"
+      ],
+      "output_modalities": [
+        "transcription"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.006,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "openai/gpt-4o-transcribe",
+      "name": "OpenAI: GPT-4o Transcribe",
+      "context_length": 128000,
+      "input_modalities": [
+        "audio"
+      ],
+      "output_modalities": [
+        "transcription"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.0000025,
+        "completion": 0.00001,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "~anthropic/claude-haiku-latest",
+      "name": "Anthropic Claude Haiku Latest",
+      "context_length": 200000,
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000001,
+        "completion": 0.000005,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "~openai/gpt-mini-latest",
+      "name": "OpenAI GPT Mini Latest",
+      "context_length": 400000,
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 7.5e-7,
+        "completion": 0.0000045,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "~google/gemini-pro-latest",
+      "name": "Google Gemini Pro Latest",
+      "context_length": 1048576,
+      "input_modalities": [
+        "audio",
+        "file",
+        "image",
+        "text",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000002,
+        "completion": 0.000012,
+        "image_output": 0,
+        "audio": 0.000002,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "~moonshotai/kimi-latest",
+      "name": "MoonshotAI Kimi Latest",
+      "context_length": 262144,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 7.3e-7,
+        "completion": 0.00000349,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "~google/gemini-flash-latest",
+      "name": "Google Gemini Flash Latest",
+      "context_length": 1048576,
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "file",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.0000015,
+        "completion": 0.000009,
+        "image_output": 0,
+        "audio": 0.000003,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "~anthropic/claude-sonnet-latest",
+      "name": "Anthropic Claude Sonnet Latest",
+      "context_length": 1000000,
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000003,
+        "completion": 0.000015,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "~openai/gpt-latest",
+      "name": "OpenAI GPT Latest",
+      "context_length": 1050000,
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000005,
+        "completion": 0.00003,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
     {
       "id": "qwen/qwen3.5-plus-20260420",
       "name": "Qwen: Qwen3.5 Plus 2026-04-20",
@@ -17,8 +1010,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 4e-7,
-        "completion": 0.0000024,
+        "prompt": 3e-7,
+        "completion": 0.0000018,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -39,8 +1032,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 2.5e-7,
-        "completion": 0.0000015,
+        "prompt": 1.875e-7,
+        "completion": 0.000001125,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -61,8 +1054,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 1.612e-7,
-        "completion": 9.6525e-7,
+        "prompt": 1.5e-7,
+        "completion": 0.000001,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -81,8 +1074,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 0.0000013,
-        "completion": 0.0000078,
+        "prompt": 0.00000104,
+        "completion": 0.00000624,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -103,8 +1096,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 5e-7,
-        "completion": 0.000002,
+        "prompt": 3e-7,
+        "completion": 0.0000032,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -177,6 +1170,26 @@
     },
     {
       "id": "deepseek/deepseek-v4-flash",
+      "name": "DeepSeek: DeepSeek V4 Flash (free)",
+      "context_length": 1048576,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": true,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "deepseek/deepseek-v4-flash",
       "name": "DeepSeek: DeepSeek V4 Flash",
       "context_length": 1048576,
       "input_modalities": [
@@ -187,8 +1200,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 1.4e-7,
-        "completion": 2.8e-7,
+        "prompt": 1e-7,
+        "completion": 2e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -359,7 +1372,7 @@
     },
     {
       "id": "inclusionai/ling-2.6-1t",
-      "name": "inclusionAI: Ling-2.6-1T (free)",
+      "name": "inclusionAI: Ling-2.6-1T",
       "context_length": 262144,
       "input_modalities": [
         "text"
@@ -367,10 +1380,10 @@
       "output_modalities": [
         "text"
       ],
-      "is_free": true,
+      "is_free": false,
       "pricing": {
-        "prompt": 0,
-        "completion": 0,
+        "prompt": 7.5e-8,
+        "completion": 6.25e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -379,7 +1392,7 @@
     },
     {
       "id": "tencent/hy3-preview",
-      "name": "Tencent: Hy3 preview (free)",
+      "name": "Tencent: Hy3 preview",
       "context_length": 262144,
       "input_modalities": [
         "text"
@@ -387,10 +1400,10 @@
       "output_modalities": [
         "text"
       ],
-      "is_free": true,
+      "is_free": false,
       "pricing": {
-        "prompt": 0,
-        "completion": 0,
+        "prompt": 6.6e-8,
+        "completion": 2.6e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -465,7 +1478,7 @@
     },
     {
       "id": "inclusionai/ling-2.6-flash",
-      "name": "inclusionAI: Ling-2.6-flash (free)",
+      "name": "inclusionAI: Ling-2.6-flash",
       "context_length": 262144,
       "input_modalities": [
         "text"
@@ -473,10 +1486,32 @@
       "output_modalities": [
         "text"
       ],
-      "is_free": true,
+      "is_free": false,
       "pricing": {
-        "prompt": 0,
-        "completion": 0,
+        "prompt": 1e-8,
+        "completion": 3e-8,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "~anthropic/claude-opus-latest",
+      "name": "Anthropic: Claude Opus Latest",
+      "context_length": 1000000,
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.000005,
+        "completion": 0.000025,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -485,7 +1520,7 @@
     },
     {
       "id": "baidu/qianfan-ocr-fast",
-      "name": "Baidu: Qianfan-OCR-Fast (free)",
+      "name": "Baidu: Qianfan-OCR-Fast",
       "context_length": 65536,
       "input_modalities": [
         "image",
@@ -494,10 +1529,10 @@
       "output_modalities": [
         "text"
       ],
-      "is_free": true,
+      "is_free": false,
       "pricing": {
-        "prompt": 0,
-        "completion": 0,
+        "prompt": 6.8e-7,
+        "completion": 0.00000281,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -549,7 +1584,7 @@
     {
       "id": "moonshotai/kimi-k2.6",
       "name": "MoonshotAI: Kimi K2.6",
-      "context_length": 256000,
+      "context_length": 262144,
       "input_modalities": [
         "text",
         "image"
@@ -559,8 +1594,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 7.448e-7,
-        "completion": 0.000004655,
+        "prompt": 7.3e-7,
+        "completion": 0.00000349,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -613,7 +1648,10 @@
       "context_length": 8192,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file",
+        "audio",
+        "video"
       ],
       "output_modalities": [
         "embeddings"
@@ -634,7 +1672,8 @@
       "context_length": 1000000,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -643,27 +1682,6 @@
       "pricing": {
         "prompt": 0.000005,
         "completion": 0.000025,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "alibaba/wan-2.7",
-      "name": "Alibaba: Wan 2.7",
-      "context_length": 0,
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "video"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0,
-        "completion": 0,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -713,12 +1731,34 @@
       }
     },
     {
+      "id": "alibaba/wan-2.7",
+      "name": "Alibaba: Wan 2.7",
+      "context_length": 0,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "video"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
       "id": "anthropic/claude-opus-4.6-fast",
       "name": "Anthropic: Claude Opus 4.6 (Fast)",
       "context_length": 1000000,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -745,8 +1785,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 0.00000105,
-        "completion": 0.0000035,
+        "prompt": 9.8e-7,
+        "completion": 0.00000308,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -893,8 +1933,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 1.3e-7,
-        "completion": 3.8e-7,
+        "prompt": 1.2e-7,
+        "completion": 3.7e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -939,6 +1979,26 @@
       "pricing": {
         "prompt": 0.0000012,
         "completion": 0.000004,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "arcee-ai/trinity-large-thinking",
+      "name": "Arcee AI: Trinity Large Thinking (free)",
+      "context_length": 262144,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": true,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -1001,8 +2061,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 0.000002,
-        "completion": 0.000006,
+        "prompt": 0.00000125,
+        "completion": 0.0000025,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -1225,7 +2285,7 @@
     {
       "id": "minimax/minimax-m2.7",
       "name": "MiniMax: MiniMax M2.7",
-      "context_length": 196608,
+      "context_length": 204800,
       "input_modalities": [
         "text"
       ],
@@ -1234,7 +2294,7 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 3e-7,
+        "prompt": 2.79e-7,
         "completion": 0.0000012,
         "image_output": 0,
         "audio": 0,
@@ -1370,7 +2430,7 @@
     {
       "id": "nvidia/nemotron-3-super-120b-a12b",
       "name": "NVIDIA: Nemotron 3 Super (free)",
-      "context_length": 262144,
+      "context_length": 1000000,
       "input_modalities": [
         "text"
       ],
@@ -1390,7 +2450,7 @@
     {
       "id": "nvidia/nemotron-3-super-120b-a12b",
       "name": "NVIDIA: Nemotron 3 Super",
-      "context_length": 262144,
+      "context_length": 1000000,
       "input_modalities": [
         "text"
       ],
@@ -1443,7 +2503,7 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 1e-7,
+        "prompt": 4e-8,
         "completion": 1.5e-7,
         "image_output": 0,
         "audio": 0,
@@ -1586,7 +2646,7 @@
     {
       "id": "google/gemini-3.1-flash-image-preview",
       "name": "Google: Nano Banana 2 (Gemini 3.1 Flash Image Preview)",
-      "context_length": 65536,
+      "context_length": 131072,
       "input_modalities": [
         "image",
         "text"
@@ -1619,8 +2679,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 1.625e-7,
-        "completion": 0.0000013,
+        "prompt": 1.39e-7,
+        "completion": 0.000001,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -1696,7 +2756,7 @@
     {
       "id": "liquid/lfm-2-24b-a2b",
       "name": "LiquidAI: LFM2-24B-A2B",
-      "context_length": 32768,
+      "context_length": 128000,
       "input_modalities": [
         "text"
       ],
@@ -1716,7 +2776,7 @@
     {
       "id": "google/gemini-3.1-pro-preview-customtools",
       "name": "Google: Gemini 3.1 Pro Preview Custom Tools",
-      "context_length": 1048576,
+      "context_length": 1048756,
       "input_modalities": [
         "text",
         "audio",
@@ -1830,7 +2890,8 @@
       "context_length": 1000000,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -1892,7 +2953,7 @@
     {
       "id": "minimax/minimax-m2.5",
       "name": "MiniMax: MiniMax M2.5 (free)",
-      "context_length": 196608,
+      "context_length": 204800,
       "input_modalities": [
         "text"
       ],
@@ -1912,7 +2973,7 @@
     {
       "id": "minimax/minimax-m2.5",
       "name": "MiniMax: MiniMax M2.5",
-      "context_length": 196608,
+      "context_length": 204800,
       "input_modalities": [
         "text"
       ],
@@ -1942,7 +3003,7 @@
       "is_free": false,
       "pricing": {
         "prompt": 6e-7,
-        "completion": 0.00000208,
+        "completion": 0.00000192,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -1975,7 +3036,8 @@
       "context_length": 1000000,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -2002,7 +3064,7 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 1.4e-7,
+        "prompt": 1.1e-7,
         "completion": 8e-7,
         "image_output": 0,
         "audio": 0,
@@ -2064,28 +3126,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 1e-7,
+        "prompt": 9e-8,
         "completion": 3e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "arcee-ai/trinity-large-preview",
-      "name": "Arcee AI: Trinity Large Preview",
-      "context_length": 131000,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 1.5e-7,
-        "completion": 4.5e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -2105,8 +3147,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 4.4e-7,
-        "completion": 0.000002,
+        "prompt": 4e-7,
+        "completion": 0.0000019,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -2320,26 +3362,6 @@
       }
     },
     {
-      "id": "allenai/olmo-3.1-32b-instruct",
-      "name": "AllenAI: Olmo 3.1 32B Instruct",
-      "context_length": 65536,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 2e-7,
-        "completion": 6e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "bytedance-seed/seedream-4.5",
       "name": "ByteDance Seed: Seedream 4.5",
       "context_length": 4096,
@@ -2407,7 +3429,7 @@
     {
       "id": "minimax/minimax-m2.1",
       "name": "MiniMax: MiniMax M2.1",
-      "context_length": 196608,
+      "context_length": 204800,
       "input_modalities": [
         "text"
       ],
@@ -2436,8 +3458,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 3.8e-7,
-        "completion": 0.00000174,
+        "prompt": 4e-7,
+        "completion": 0.00000175,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -2464,26 +3486,6 @@
         "completion": 0.000003,
         "image_output": 0,
         "audio": 0.000001,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "mistralai/mistral-small-creative",
-      "name": "Mistral: Mistral Small Creative",
-      "context_length": 32768,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 1e-7,
-        "completion": 3e-7,
-        "image_output": 0,
-        "audio": 0,
         "video_output": 0,
         "request": 0
       }
@@ -2521,8 +3523,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 9e-8,
-        "completion": 2.9e-7,
+        "prompt": 1e-7,
+        "completion": 3e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -2640,7 +3642,8 @@
       "name": "Mistral: Devstral 2 2512",
       "context_length": 262144,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -2913,7 +3916,8 @@
       "context_length": 262144,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -2960,8 +3964,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 4e-7,
-        "completion": 0.0000012,
+        "prompt": 2.87e-7,
+        "completion": 4.31e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -3115,31 +4119,9 @@
       }
     },
     {
-      "id": "x-ai/grok-4.1-fast",
-      "name": "xAI: Grok 4.1 Fast",
-      "context_length": 2000000,
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 2e-7,
-        "completion": 5e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "thenlper/gte-base",
       "name": "Thenlper: GTE-Base",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3159,7 +4141,7 @@
     {
       "id": "thenlper/gte-large",
       "name": "Thenlper: GTE-Large",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3179,7 +4161,7 @@
     {
       "id": "intfloat/e5-large-v2",
       "name": "Intfloat: E5-Large-v2",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3199,7 +4181,7 @@
     {
       "id": "intfloat/e5-base-v2",
       "name": "Intfloat: E5-Base-v2",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3219,7 +4201,7 @@
     {
       "id": "intfloat/multilingual-e5-large",
       "name": "Intfloat: Multilingual-E5-Large",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3239,7 +4221,7 @@
     {
       "id": "sentence-transformers/paraphrase-minilm-l6-v2",
       "name": "Sentence Transformers: paraphrase-MiniLM-L6-v2",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3259,7 +4241,7 @@
     {
       "id": "sentence-transformers/all-minilm-l12-v2",
       "name": "Sentence Transformers: all-MiniLM-L12-v2",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3279,7 +4261,7 @@
     {
       "id": "baai/bge-base-en-v1.5",
       "name": "BAAI: bge-base-en-v1.5",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3299,7 +4281,7 @@
     {
       "id": "sentence-transformers/multi-qa-mpnet-base-dot-v1",
       "name": "Sentence Transformers: multi-qa-mpnet-base-dot-v1",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3319,7 +4301,7 @@
     {
       "id": "baai/bge-large-en-v1.5",
       "name": "BAAI: bge-large-en-v1.5",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3359,7 +4341,7 @@
     {
       "id": "sentence-transformers/all-mpnet-base-v2",
       "name": "Sentence Transformers: all-mpnet-base-v2",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3379,7 +4361,7 @@
     {
       "id": "sentence-transformers/all-minilm-l6-v2",
       "name": "Sentence Transformers: all-MiniLM-L6-v2",
-      "context_length": 512,
+      "context_length": 8192,
       "input_modalities": [
         "text"
       ],
@@ -3690,7 +4672,8 @@
       "context_length": 32000,
       "input_modalities": [
         "text",
-        "audio"
+        "audio",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -3768,28 +4751,6 @@
       }
     },
     {
-      "id": "nvidia/nemotron-nano-12b-v2-vl",
-      "name": "NVIDIA: Nemotron Nano 12B 2 VL",
-      "context_length": 131072,
-      "input_modalities": [
-        "image",
-        "text",
-        "video"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 2e-7,
-        "completion": 6e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "qwen/qwen3-embedding-4b",
       "name": "Qwen: Qwen3 Embedding 4B",
       "context_length": 32768,
@@ -3812,7 +4773,7 @@
     {
       "id": "minimax/minimax-m2",
       "name": "MiniMax: MiniMax M2",
-      "context_length": 196608,
+      "context_length": 204800,
       "input_modalities": [
         "text"
       ],
@@ -3832,7 +4793,7 @@
     {
       "id": "qwen/qwen3-vl-32b-instruct",
       "name": "Qwen: Qwen3 VL 32B Instruct",
-      "context_length": 131072,
+      "context_length": 262144,
       "input_modalities": [
         "text",
         "image"
@@ -3863,7 +4824,27 @@
       "is_free": false,
       "pricing": {
         "prompt": 1.7e-8,
-        "completion": 1.1e-7,
+        "completion": 1.12e-7,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "microsoft/phi-4-mini-instruct",
+      "name": "Microsoft: Phi 4 Mini Instruct",
+      "context_length": 131072,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 8e-8,
+        "completion": 3.5e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -3898,8 +4879,9 @@
       "name": "Anthropic: Claude Haiku 4.5",
       "context_length": 200000,
       "input_modalities": [
+        "text",
         "image",
-        "text"
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -3917,7 +4899,7 @@
     {
       "id": "qwen/qwen3-vl-8b-thinking",
       "name": "Qwen: Qwen3 VL 8B Thinking",
-      "context_length": 131072,
+      "context_length": 256000,
       "input_modalities": [
         "image",
         "text"
@@ -3938,7 +4920,7 @@
     {
       "id": "qwen/qwen3-vl-8b-instruct",
       "name": "Qwen: Qwen3 VL 8B Instruct",
-      "context_length": 131072,
+      "context_length": 256000,
       "input_modalities": [
         "image",
         "text"
@@ -4109,7 +5091,7 @@
     {
       "id": "qwen/qwen3-vl-30b-a3b-instruct",
       "name": "Qwen: Qwen3 VL 30B A3B Instruct",
-      "context_length": 131072,
+      "context_length": 262144,
       "input_modalities": [
         "text",
         "image"
@@ -4152,7 +5134,7 @@
     {
       "id": "z-ai/glm-4.6",
       "name": "Z.ai: GLM 4.6",
-      "context_length": 204800,
+      "context_length": 202752,
       "input_modalities": [
         "text"
       ],
@@ -4161,8 +5143,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 3.9e-7,
-        "completion": 0.0000019,
+        "prompt": 4.3e-7,
+        "completion": 0.00000174,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -4390,30 +5372,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 2.1e-7,
-        "completion": 7.9e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "x-ai/grok-4-fast",
-      "name": "xAI: Grok 4 Fast",
-      "context_length": 2000000,
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 2e-7,
-        "completion": 5e-7,
+        "prompt": 2.7e-7,
+        "completion": 9.5e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -4463,7 +5423,7 @@
     {
       "id": "qwen/qwen3-next-80b-a3b-thinking",
       "name": "Qwen: Qwen3 Next 80B A3B Thinking",
-      "context_length": 131072,
+      "context_length": 262144,
       "input_modalities": [
         "text"
       ],
@@ -4612,8 +5572,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 4e-7,
-        "completion": 0.000002,
+        "prompt": 6e-7,
+        "completion": 0.0000025,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -4634,26 +5594,6 @@
       "pricing": {
         "prompt": 8e-8,
         "completion": 4e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "x-ai/grok-code-fast-1",
-      "name": "xAI: Grok Code Fast 1",
-      "context_length": 256000,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 2e-7,
-        "completion": 0.0000015,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -4703,7 +5643,7 @@
     {
       "id": "deepseek/deepseek-chat-v3.1",
       "name": "DeepSeek: DeepSeek V3.1",
-      "context_length": 32768,
+      "context_length": 163840,
       "input_modalities": [
         "text"
       ],
@@ -4712,8 +5652,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 1.5e-7,
-        "completion": 7.5e-7,
+        "prompt": 2.1e-7,
+        "completion": 7.9e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -4748,7 +5688,8 @@
       "context_length": 131072,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -4766,7 +5707,7 @@
     {
       "id": "baidu/ernie-4.5-21b-a3b",
       "name": "Baidu: ERNIE 4.5 21B A3B",
-      "context_length": 120000,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -4786,7 +5727,7 @@
     {
       "id": "baidu/ernie-4.5-vl-28b-a3b",
       "name": "Baidu: ERNIE 4.5 VL 28B A3B",
-      "context_length": 30000,
+      "context_length": 131072,
       "input_modalities": [
         "text",
         "image"
@@ -4966,7 +5907,7 @@
       "is_free": false,
       "pricing": {
         "prompt": 3.9e-8,
-        "completion": 1.9e-7,
+        "completion": 1.8e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -5040,7 +5981,8 @@
       "name": "Mistral: Codestral 2508",
       "context_length": 256000,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -5158,7 +6100,7 @@
     {
       "id": "qwen/qwen3-235b-a22b-thinking-2507",
       "name": "Qwen: Qwen3 235B A22B Thinking 2507",
-      "context_length": 131072,
+      "context_length": 262144,
       "input_modalities": [
         "text"
       ],
@@ -5198,7 +6140,7 @@
     {
       "id": "qwen/qwen3-coder",
       "name": "Qwen: Qwen3 Coder 480B A35B (free)",
-      "context_length": 262000,
+      "context_length": 1048576,
       "input_modalities": [
         "text"
       ],
@@ -5218,7 +6160,7 @@
     {
       "id": "qwen/qwen3-coder",
       "name": "Qwen: Qwen3 Coder 480B A35B",
-      "context_length": 262144,
+      "context_length": 1048576,
       "input_modalities": [
         "text"
       ],
@@ -5345,7 +6287,8 @@
       "name": "Mistral: Devstral Medium",
       "context_length": 131072,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -5365,7 +6308,8 @@
       "name": "Mistral: Devstral Small 1.1",
       "context_length": 131072,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -5401,48 +6345,6 @@
       }
     },
     {
-      "id": "x-ai/grok-4",
-      "name": "xAI: Grok 4",
-      "context_length": 256000,
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.000003,
-        "completion": 0.000015,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "google/gemma-3n-e2b-it",
-      "name": "Google: Gemma 3n 2B (free)",
-      "context_length": 8192,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": true,
-      "pricing": {
-        "prompt": 0,
-        "completion": 0,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "tencent/hunyuan-a13b-instruct",
       "name": "Tencent: Hunyuan A13B Instruct",
       "context_length": 131072,
@@ -5456,26 +6358,6 @@
       "pricing": {
         "prompt": 1.4e-7,
         "completion": 5.7e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "tngtech/deepseek-r1t2-chimera",
-      "name": "TNG: DeepSeek R1T2 Chimera",
-      "context_length": 163840,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 3e-7,
-        "completion": 0.0000011,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -5525,7 +6407,7 @@
     {
       "id": "baidu/ernie-4.5-vl-424b-a47b",
       "name": "Baidu: ERNIE 4.5 VL 424B A47B ",
-      "context_length": 123000,
+      "context_length": 131072,
       "input_modalities": [
         "image",
         "text"
@@ -5546,7 +6428,7 @@
     {
       "id": "baidu/ernie-4.5-300b-a47b",
       "name": "Baidu: ERNIE 4.5 300B A47B ",
-      "context_length": 123000,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -5675,46 +6557,6 @@
       }
     },
     {
-      "id": "x-ai/grok-3-mini",
-      "name": "xAI: Grok 3 Mini",
-      "context_length": 131072,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 3e-7,
-        "completion": 5e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "x-ai/grok-3",
-      "name": "xAI: Grok 3",
-      "context_length": 131072,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.000003,
-        "completion": 0.000015,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "google/gemini-2.5-pro-preview",
       "name": "Google: Gemini 2.5 Pro Preview 06-05",
       "context_length": 1048576,
@@ -5803,26 +6645,6 @@
     },
     {
       "id": "google/gemma-3n-e4b-it",
-      "name": "Google: Gemma 3n 4B (free)",
-      "context_length": 8192,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": true,
-      "pricing": {
-        "prompt": 0,
-        "completion": 0,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "google/gemma-3n-e4b-it",
       "name": "Google: Gemma 3n 4B",
       "context_length": 32768,
       "input_modalities": [
@@ -5847,7 +6669,8 @@
       "context_length": 131072,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -5991,7 +6814,7 @@
     {
       "id": "qwen/qwen3-30b-a3b",
       "name": "Qwen: Qwen3 30B A3B",
-      "context_length": 40960,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -6000,8 +6823,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 8e-8,
-        "completion": 2.8e-7,
+        "prompt": 9e-8,
+        "completion": 4.5e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -6011,7 +6834,7 @@
     {
       "id": "qwen/qwen3-8b",
       "name": "Qwen: Qwen3 8B",
-      "context_length": 40960,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -6031,7 +6854,7 @@
     {
       "id": "qwen/qwen3-14b",
       "name": "Qwen: Qwen3 14B",
-      "context_length": 40960,
+      "context_length": 131702,
       "input_modalities": [
         "text"
       ],
@@ -6040,7 +6863,7 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 6e-8,
+        "prompt": 1e-7,
         "completion": 2.4e-7,
         "image_output": 0,
         "audio": 0,
@@ -6051,7 +6874,7 @@
     {
       "id": "qwen/qwen3-32b",
       "name": "Qwen: Qwen3 32B",
-      "context_length": 40960,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -6061,7 +6884,7 @@
       "is_free": false,
       "pricing": {
         "prompt": 8e-8,
-        "completion": 2.4e-7,
+        "completion": 2.8e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -6241,46 +7064,6 @@
       }
     },
     {
-      "id": "x-ai/grok-3-mini-beta",
-      "name": "xAI: Grok 3 Mini Beta",
-      "context_length": 131072,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 3e-7,
-        "completion": 5e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "x-ai/grok-3-beta",
-      "name": "xAI: Grok 3 Beta",
-      "context_length": 131072,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.000003,
-        "completion": 0.000015,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "meta-llama/llama-4-maverick",
       "name": "Meta: Llama 4 Maverick",
       "context_length": 1048576,
@@ -6304,7 +7087,7 @@
     {
       "id": "meta-llama/llama-4-scout",
       "name": "Meta: Llama 4 Scout",
-      "context_length": 327680,
+      "context_length": 10000000,
       "input_modalities": [
         "text",
         "image"
@@ -6377,29 +7160,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 3.5e-7,
-        "completion": 5.6e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "google/gemma-3-4b-it",
-      "name": "Google: Gemma 3 4B (free)",
-      "context_length": 32768,
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": true,
-      "pricing": {
-        "prompt": 0,
-        "completion": 0,
+        "prompt": 3.51e-7,
+        "completion": 5.55e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -6421,27 +7183,6 @@
       "pricing": {
         "prompt": 4e-8,
         "completion": 8e-8,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "google/gemma-3-12b-it",
-      "name": "Google: Gemma 3 12B (free)",
-      "context_length": 32768,
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": true,
-      "pricing": {
-        "prompt": 0,
-        "completion": 0,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -6543,27 +7284,6 @@
       "pricing": {
         "prompt": 1e-7,
         "completion": 2e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "google/gemma-3-27b-it",
-      "name": "Google: Gemma 3 27B (free)",
-      "context_length": 131072,
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": true,
-      "pricing": {
-        "prompt": 0,
-        "completion": 0,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -6674,26 +7394,6 @@
       }
     },
     {
-      "id": "qwen/qwq-32b",
-      "name": "Qwen: QwQ 32B",
-      "context_length": 131072,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 1.5e-7,
-        "completion": 5.8e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "google/gemini-2.0-flash-lite-001",
       "name": "Google: Gemini 2.0 Flash Lite",
       "context_length": 1048576,
@@ -6718,55 +7418,12 @@
       }
     },
     {
-      "id": "anthropic/claude-3.7-sonnet",
-      "name": "Anthropic: Claude 3.7 Sonnet",
-      "context_length": 200000,
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.000003,
-        "completion": 0.000015,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "anthropic/claude-3.7-sonnet",
-      "name": "Anthropic: Claude 3.7 Sonnet (thinking)",
-      "context_length": 200000,
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.000003,
-        "completion": 0.000015,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "mistralai/mistral-saba",
       "name": "Mistral: Saba",
       "context_length": 32768,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -6793,7 +7450,7 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 4.8e-7,
+        "prompt": 4.84e-7,
         "completion": 3e-8,
         "image_output": 0,
         "audio": 0,
@@ -6842,27 +7499,6 @@
         "completion": 4e-7,
         "image_output": 0,
         "audio": 7e-7,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "qwen/qwen-vl-plus",
-      "name": "Qwen: Qwen VL Plus",
-      "context_length": 131072,
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 1.365e-7,
-        "completion": 4.095e-7,
-        "image_output": 0,
-        "audio": 0,
         "video_output": 0,
         "request": 0
       }
@@ -6928,50 +7564,9 @@
       }
     },
     {
-      "id": "qwen/qwen-vl-max",
-      "name": "Qwen: Qwen VL Max",
-      "context_length": 131072,
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 5.2e-7,
-        "completion": 0.00000208,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "qwen/qwen-turbo",
-      "name": "Qwen: Qwen-Turbo",
-      "context_length": 131072,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 3.25e-8,
-        "completion": 1.3e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "qwen/qwen2.5-vl-72b-instruct",
       "name": "Qwen: Qwen2.5 VL 72B Instruct",
-      "context_length": 32000,
+      "context_length": 131072,
       "input_modalities": [
         "text",
         "image"
@@ -7003,26 +7598,6 @@
       "pricing": {
         "prompt": 2.6e-7,
         "completion": 7.8e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "qwen/qwen-max",
-      "name": "Qwen: Qwen-Max ",
-      "context_length": 32768,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.00000104,
-        "completion": 0.00000416,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -7073,7 +7648,7 @@
     {
       "id": "deepseek/deepseek-r1-distill-qwen-32b",
       "name": "DeepSeek: R1 Distill Qwen 32B",
-      "context_length": 32768,
+      "context_length": 128000,
       "input_modalities": [
         "text"
       ],
@@ -7134,7 +7709,7 @@
     {
       "id": "deepseek/deepseek-r1",
       "name": "DeepSeek: R1",
-      "context_length": 64000,
+      "context_length": 163840,
       "input_modalities": [
         "text"
       ],
@@ -7297,7 +7872,7 @@
     {
       "id": "meta-llama/llama-3.3-70b-instruct",
       "name": "Meta: Llama 3.3 70B Instruct (free)",
-      "context_length": 65536,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -7423,7 +7998,8 @@
       "name": "Mistral Large 2411",
       "context_length": 131072,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -7443,7 +8019,8 @@
       "name": "Mistral Large 2407",
       "context_length": 131072,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -7464,7 +8041,8 @@
       "context_length": 131072,
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -7482,7 +8060,7 @@
     {
       "id": "qwen/qwen-2.5-coder-32b-instruct",
       "name": "Qwen2.5 Coder 32B Instruct",
-      "context_length": 32768,
+      "context_length": 128000,
       "input_modalities": [
         "text"
       ],
@@ -7543,7 +8121,7 @@
     {
       "id": "anthracite-org/magnum-v4-72b",
       "name": "Magnum v4 72B",
-      "context_length": 16384,
+      "context_length": 32768,
       "input_modalities": [
         "text"
       ],
@@ -7563,7 +8141,7 @@
     {
       "id": "qwen/qwen-2.5-7b-instruct",
       "name": "Qwen: Qwen2.5 7B Instruct",
-      "context_length": 32768,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -7574,26 +8152,6 @@
       "pricing": {
         "prompt": 4e-8,
         "completion": 1e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "nvidia/llama-3.1-nemotron-70b-instruct",
-      "name": "NVIDIA: Llama 3.1 Nemotron 70B Instruct",
-      "context_length": 131072,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.0000012,
-        "completion": 0.0000012,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -7661,6 +8219,47 @@
       }
     },
     {
+      "id": "meta-llama/llama-3.2-11b-vision-instruct",
+      "name": "Meta: Llama 3.2 11B Vision Instruct",
+      "context_length": 131072,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 2.45e-7,
+        "completion": 2.45e-7,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "meta-llama/llama-3.2-1b-instruct",
+      "name": "Meta: Llama 3.2 1B Instruct",
+      "context_length": 131072,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 2.7e-8,
+        "completion": 2.01e-7,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
       "id": "meta-llama/llama-3.2-3b-instruct",
       "name": "Meta: Llama 3.2 3B Instruct (free)",
       "context_length": 131072,
@@ -7683,58 +8282,17 @@
     {
       "id": "meta-llama/llama-3.2-3b-instruct",
       "name": "Meta: Llama 3.2 3B Instruct",
-      "context_length": 80000,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 5.1e-8,
-        "completion": 3.4e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "meta-llama/llama-3.2-1b-instruct",
-      "name": "Meta: Llama 3.2 1B Instruct",
-      "context_length": 60000,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 2.7e-8,
-        "completion": 2e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "meta-llama/llama-3.2-11b-vision-instruct",
-      "name": "Meta: Llama 3.2 11B Vision Instruct",
       "context_length": 131072,
       "input_modalities": [
-        "text",
-        "image"
+        "text"
       ],
       "output_modalities": [
         "text"
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 2.45e-7,
-        "completion": 2.45e-7,
+        "prompt": 5.09e-8,
+        "completion": 3.35e-7,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -7744,7 +8302,7 @@
     {
       "id": "qwen/qwen-2.5-72b-instruct",
       "name": "Qwen2.5 72B Instruct",
-      "context_length": 32768,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -7755,26 +8313,6 @@
       "pricing": {
         "prompt": 3.6e-7,
         "completion": 4e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "cohere/command-r-plus-08-2024",
-      "name": "Cohere: Command R+ (08-2024)",
-      "context_length": 128000,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.0000025,
-        "completion": 0.00001,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -7795,6 +8333,26 @@
       "pricing": {
         "prompt": 1.5e-7,
         "completion": 6e-7,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "cohere/command-r-plus-08-2024",
+      "name": "Cohere: Command R+ (08-2024)",
+      "context_length": 128000,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.0000025,
+        "completion": 0.00001,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -7946,7 +8504,7 @@
     {
       "id": "meta-llama/llama-3.1-8b-instruct",
       "name": "Meta: Llama 3.1 8B Instruct",
-      "context_length": 16384,
+      "context_length": 131072,
       "input_modalities": [
         "text"
       ],
@@ -7976,7 +8534,7 @@
       "is_free": false,
       "pricing": {
         "prompt": 2e-8,
-        "completion": 4e-8,
+        "completion": 3e-8,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -8088,28 +8646,6 @@
       }
     },
     {
-      "id": "openai/gpt-4o-2024-05-13",
-      "name": "OpenAI: GPT-4o (2024-05-13)",
-      "context_length": 128000,
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.000005,
-        "completion": 0.000015,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "openai/gpt-4o",
       "name": "OpenAI: GPT-4o",
       "context_length": 128000,
@@ -8132,19 +8668,21 @@
       }
     },
     {
-      "id": "meta-llama/llama-3-8b-instruct",
-      "name": "Meta: Llama 3 8B Instruct",
-      "context_length": 8192,
+      "id": "openai/gpt-4o-2024-05-13",
+      "name": "OpenAI: GPT-4o (2024-05-13)",
+      "context_length": 128000,
       "input_modalities": [
-        "text"
+        "text",
+        "image",
+        "file"
       ],
       "output_modalities": [
         "text"
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 3e-8,
-        "completion": 4e-8,
+        "prompt": 0.000005,
+        "completion": 0.000015,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -8172,11 +8710,32 @@
       }
     },
     {
+      "id": "meta-llama/llama-3-8b-instruct",
+      "name": "Meta: Llama 3 8B Instruct",
+      "context_length": 8192,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 4e-8,
+        "completion": 4e-8,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
       "id": "mistralai/mixtral-8x22b-instruct",
       "name": "Mistral: Mixtral 8x22B Instruct",
       "context_length": 65536,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -8194,7 +8753,7 @@
     {
       "id": "microsoft/wizardlm-2-8x22b",
       "name": "WizardLM-2 8x22B",
-      "context_length": 65535,
+      "context_length": 65536,
       "input_modalities": [
         "text"
       ],
@@ -8258,7 +8817,8 @@
       "name": "Mistral Large",
       "context_length": 128000,
       "input_modalities": [
-        "text"
+        "text",
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -8267,26 +8827,6 @@
       "pricing": {
         "prompt": 0.000002,
         "completion": 0.000006,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "openai/gpt-4-turbo-preview",
-      "name": "OpenAI: GPT-4 Turbo Preview",
-      "context_length": 128000,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.00001,
-        "completion": 0.00003,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -8314,9 +8854,9 @@
       }
     },
     {
-      "id": "mistralai/mixtral-8x7b-instruct",
-      "name": "Mistral: Mixtral 8x7B Instruct",
-      "context_length": 32768,
+      "id": "openai/gpt-4-turbo-preview",
+      "name": "OpenAI: GPT-4 Turbo Preview",
+      "context_length": 128000,
       "input_modalities": [
         "text"
       ],
@@ -8325,28 +8865,8 @@
       ],
       "is_free": false,
       "pricing": {
-        "prompt": 5.4e-7,
-        "completion": 5.4e-7,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
-      "id": "alpindale/goliath-120b",
-      "name": "Goliath 120B",
-      "context_length": 6144,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.00000375,
-        "completion": 0.0000075,
+        "prompt": 0.00001,
+        "completion": 0.00003,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,
@@ -8376,7 +8896,7 @@
     {
       "id": "mistralai/mistral-7b-instruct-v0.1",
       "name": "Mistral: Mistral 7B Instruct v0.1",
-      "context_length": 2824,
+      "context_length": 4096,
       "input_modalities": [
         "text"
       ],
@@ -8494,26 +9014,6 @@
       }
     },
     {
-      "id": "openai/gpt-4",
-      "name": "OpenAI: GPT-4",
-      "context_length": 8191,
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "is_free": false,
-      "pricing": {
-        "prompt": 0.00003,
-        "completion": 0.00006,
-        "image_output": 0,
-        "audio": 0,
-        "video_output": 0,
-        "request": 0
-      }
-    },
-    {
       "id": "openai/gpt-4-0314",
       "name": "OpenAI: GPT-4 (older v0314)",
       "context_length": 8191,
@@ -8547,6 +9047,26 @@
       "pricing": {
         "prompt": 5e-7,
         "completion": 0.0000015,
+        "image_output": 0,
+        "audio": 0,
+        "video_output": 0,
+        "request": 0
+      }
+    },
+    {
+      "id": "openai/gpt-4",
+      "name": "OpenAI: GPT-4",
+      "context_length": 8191,
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "is_free": false,
+      "pricing": {
+        "prompt": 0.00003,
+        "completion": 0.00006,
         "image_output": 0,
         "audio": 0,
         "video_output": 0,

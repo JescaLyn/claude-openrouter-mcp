@@ -333,7 +333,7 @@ Returns a single-line commit message. No `style` parameter — style is non-nego
     "pdf": "string (required) — URL or data:application/pdf;base64,...",
     "prompt": "string (required) — question or extraction task",
     "engine": "enum? = 'cloudflare-ai' | 'mistral-ocr'  (default: 'cloudflare-ai')",
-    "model": "string? — chat model used after extraction (default: openai/gpt-oss-120b:free)",
+    "model": "string? — chat model used after extraction (default: openai/gpt-oss-120b, a free model)",
     "allow_paid": "boolean? = false  — required if engine='mistral-ocr' or model is non-free"
   }
 }
@@ -363,7 +363,7 @@ Returns a single-line commit message. No `style` parameter — style is non-nego
   "description": "Route a query with very large input (>100K tokens) to a free 262K-context model. Use for whole-repo dump questions, log haystack search, multi-document Q&A.",
   "params": {
     "prompt": "string (required) — combined input + question",
-    "model": "string? — defaults to qwen/qwen3-next-80b-a3b-instruct:free",
+    "model": "string? — defaults to qwen/qwen3-next-80b-a3b-instruct (free)",
     "max_tokens": "integer? = 4096",
     "allow_paid": "boolean? = false"
   }

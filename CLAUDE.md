@@ -113,7 +113,7 @@ Success:
   "finish_reason": "stop", "fallback_chain": [...], "cost_usd": 0 }
 ```
 
-Error (taxonomy: `UPSTREAM_HTTP`, `UPSTREAM_TIMEOUT`, `MODEL_NOT_FOUND`, `RATE_LIMITED`, `FREE_EXHAUSTED`, `PAID_CONFIRMATION_REQUIRED`, `RESOURCE_TOO_LARGE`, `INVALID_INPUT`):
+Error (taxonomy: `UPSTREAM_HTTP`, `UPSTREAM_TIMEOUT`, `MODEL_NOT_FOUND`, `RATE_LIMITED`, `FREE_EXHAUSTED`, `PAID_CONFIRMATION_REQUIRED`, `RESOURCE_TOO_LARGE`, `INVALID_INPUT`, `MISSING_CREDENTIAL`):
 ```json
 { "error": { "code": "...", "message": "...", "retryable": bool,
              "suggested_action": "...", "estimated_cost_usd": 0, "cost_breakdown": "..." }}
