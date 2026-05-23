@@ -12,6 +12,10 @@ npm test
 
 See [DEVELOPMENT.md](DEVELOPMENT.md) for the full guide — model chain updates, adding tools, running the model comparison suite, and the release checklist.
 
+## Claude Code users
+
+The `.claude/` folder contains Claude Code-specific tooling: the `model-evaluator` agent definition and the `run-tests` skill. These are optional — the core `npm run test:models` workflow works without them. Users of other AI coding assistants would use their tool's equivalent configuration directory.
+
 ## Key rules (from CLAUDE.md)
 
 - Text-in / text-out only. Don't add `file_path` parameters to tools.

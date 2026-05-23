@@ -1,5 +1,3 @@
-**Session protocol:** `standard`
-
 # CLAUDE.md — openrouter-mcp
 
 MCP server (also packaged as a Claude Code plugin) that exposes OpenRouter models as named tools. Claude Code sessions delegate leaf-node work — summarize, extract, classify, OCR, code explanation, commit messages, etc. — to free OpenRouter models to save context. Paid options exist for capabilities with no free path (image / audio / video generation, audio transcription) but require explicit per-call user approval.
@@ -159,6 +157,8 @@ See `docs/TOOLS.md` for full schemas.
 - **Use `Retry-After` AND `X-RateLimit-Reset`.** When a 429 carries `Retry-After`, sleep for that duration before retrying — don't parse it and discard. The #1 lesson from prior-art audit was "parsed Retry-After but never used it."
 - **DI the `OpenRouterClient`**, don't import as a module global. Pass it into tool handlers as context. Module-level singletons are the dominant testing-pain pattern in MCP server codebases.
 - **`query_model` accepts an `extra` passthrough.** Don't add new typed fields for every OpenRouter feature; route exotic configurations through `extra` so the surface stays small.
+- **`query_model`'s `allow_paid` is advisory, not enforced.** The tool is a raw passthrough — the caller names the model and is responsible for knowing the cost. Named tools (summarize, classify, etc.) do enforce `allow_paid` through the chain. This is intentional; don't add a gate to `query_model` without also integrating the probe data to know which models are actually paid.
+- **Named tool `model` override bypasses the chain but not the intent.** When a caller passes `model:` to a named tool, it routes through `chatDirect` which skips the free chain and `allow_paid` check. This is a known gap — for now it's the caller's responsibility to know the model's cost tier when overriding.
 - **File size soft cap: ~400 LOC per tool file**, ~600 for `client.ts`. If `client.ts` accretes the fallback chain + retry + paid-gate + cost-estimation logic past ~600, split into `client.ts` + `fallback.ts` + `pricing.ts`. Monolith files are flagged in multiple prior-art repos as where bugs hide.
 - **Never `console.log` from import-time code.** The MCP transport is stdio JSON-RPC; any stray stdout corrupts the channel. Log to stderr (`console.error`) or to a file, never to stdout.
 
@@ -169,6 +169,3 @@ See `docs/TOOLS.md` for full schemas.
 - **`docs/TOOLS.md`** — full tool API specifications
 - **`docs/MODELS.md`** — verified free model list, per-task curated map, paid pricing, refresh procedure
 
-## When You're Doing Git Work in This Repo
-
-Per the user's git-workflow rule: Claude stages only, user commits from terminal. To draft a commit message for *this repo*, run `/run-agent commit-drafter` rather than using the `commit_message` tool we're building (which is for end users of the MCP, not for committing this repo).

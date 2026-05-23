@@ -54,12 +54,7 @@ src/
 ├── envelope.ts         # Success/error envelope builders
 ├── prompt.ts           # Message composition, untrusted content wrapping
 ├── types.ts            # Shared TypeScript types
-└── tools/              # 22 tool implementations, one file per tool
-    ├── foundation/     # query_model, query_free, list_free_models
-    ├── text/          # summarize, extract, classify, translate, rewrite
-    ├── code/          # explain_code, generate_docstring, generate_regex, generate_sql, commit_message
-    ├── free_input/    # extract_text, analyze_image, read_pdf, analyze_video, query_long_context
-    └── paid_gen/      # generate_image, generate_audio, generate_video, transcribe
+└── tools/              # 22 tool files, flat (analyze_image.ts, classify.ts, ...)
 
 tests/                  # Vitest unit tests
 tests/model-comparison/ # Model evaluation suite (see below)
@@ -116,23 +111,17 @@ code: {
 
 When proposing a primary model change or evaluating competing free models, use the test suite:
 
-**Automated workflow (recommended):**
+**Run all comparison groups:**
 ```bash
-/run-tests
+npm run test:models -- --all --save
 ```
 
-This runs all 4 comparison groups, evaluates outputs, and generates a formatted analysis report with recommendations.
-
-**Manual workflow** (if you want to run specific groups):
+**Run a specific group:**
 ```bash
-# Run tests for a specific comparison group
 npm run test:models -- --group code_reasoning --save
 npm run test:models -- --group classification --save
 npm run test:models -- --group long_context_reasoning --save
 npm run test:models -- --group multimodal_video --save
-
-# Then manually evaluate:
-/run-agent model-evaluator -- <path-to-results-json>
 ```
 
 This executes standardized test cases, collects latency/token/cost metrics, and saves raw outputs to `tests/model-comparison/results/`.
@@ -156,7 +145,7 @@ See [tests/model-comparison/README.md](tests/model-comparison/README.md) for det
 
 ### 3. Adding a New Tool
 
-1. Create the tool file in `src/tools/{category}/` (e.g. `src/tools/text/my-new-tool.ts`)
+1. Create the tool file in `src/tools/` (e.g. `src/tools/my_new_tool.ts`) — tool files are flat, not in subdirectories
 2. Implement the handler and register it with the MCP server in `src/server.ts`
 3. Assign a task type and model chain in `src/models.ts`:
    ```typescript
@@ -187,12 +176,10 @@ If a user calls a paid tool and the cost estimate seems wrong:
 ```bash
 npm run test              # Run all tests once
 npm run test:watch       # Watch mode
-npm test -- --ui         # UI mode (Vitest UI)
 ```
 
 Test structure:
-- One test file per tool in `tests/tools/`
-- Foundation tests in `tests/foundation/`
+- Test files live flat in `tests/` — one per tool (e.g. `tests/classify.test.ts`) plus foundation tests (`tests/client.test.ts`, `tests/envelope.test.ts`, etc.)
 - Model comparison suite in `tests/model-comparison/`
 
 ### Type checking

@@ -48,7 +48,7 @@ export const definition = {
       allow_paid: {
         type: 'boolean',
         description:
-          'Acknowledge that the chosen model may be paid. Without this, the call still runs (since the caller picked the model), but you should know what you\'re paying for. Defaults to false.',
+          'Acknowledge that the chosen model may be paid. This is advisory — the call runs regardless, since the caller is explicitly naming the model. Use it as a self-documenting signal that you have confirmed the model\'s pricing. For gated cost confirmation, use a named tool (summarize, classify, etc.) which enforces allow_paid on its chain. Defaults to false.',
         default: false,
       },
       extra: {

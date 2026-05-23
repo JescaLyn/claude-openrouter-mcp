@@ -18,11 +18,17 @@ const UNTRUSTED_CLOSE = 'UNTRUSTED_CONTENT>>>';
 
 /**
  * Wrap user-supplied text with a delimiter and a "treat as data" header.
- * The delimiter is rare enough in normal text that escape attacks are
- * impractical without explicit prompt-engineering of the wrapper itself.
+ *
+ * We escape occurrences of the delimiter strings within the text so that a
+ * malicious input cannot structurally close the block and inject instructions
+ * that appear to be outside the untrusted section.
  */
 export function wrapUntrusted(text: string): string {
-  return `${UNTRUSTED_HEADER}\n${UNTRUSTED_OPEN}\n${text}\n${UNTRUSTED_CLOSE}`;
+  // Replace the closing delimiter anywhere it appears inside the payload.
+  const safe = text
+    .replaceAll(UNTRUSTED_CLOSE, 'UNTRUSTED_CONTENT›››')
+    .replaceAll(UNTRUSTED_OPEN, '‹‹‹UNTRUSTED_CONTENT');
+  return `${UNTRUSTED_HEADER}\n${UNTRUSTED_OPEN}\n${safe}\n${UNTRUSTED_CLOSE}`;
 }
 
 /**

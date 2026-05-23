@@ -107,7 +107,9 @@ function parseV1(json: unknown): ModelInfo[] {
       id,
       name: (m.name as string | undefined) ?? id,
       context_length: typeof m.context_length === 'number' ? m.context_length : 0,
-      // v1 doesn't expose endpoint.is_free directly; infer from pricing fields.
+      // v1 doesn't expose endpoint.is_free directly; infer from token pricing only.
+      // This misses image/audio/video models that bill via non-token fields — treat
+      // any result with source:'v1' as potentially incomplete for non-chat models.
       is_free: promptPrice === 0 && completionPrice === 0,
       input_modalities: (arch.input_modalities as string[] | undefined) ?? [],
       output_modalities: (arch.output_modalities as string[] | undefined) ?? [],

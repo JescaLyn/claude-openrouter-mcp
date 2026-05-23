@@ -1,6 +1,6 @@
 # Models — openrouter-mcp
 
-Per-task curated model map, paid-tier pricing, and the procedure for refreshing both. Source data verified against `https://openrouter.ai/api/frontend/models` on 2026-04-26.
+Per-task curated model map, paid-tier pricing, and the procedure for refreshing both. Source data verified against `https://openrouter.ai/api/frontend/models` on 2026-04-26. **OpenRouter's free tier shifts monthly — run `npm run probe:models` to verify the current state before relying on the list below.**
 
 ## How to Refresh This Doc and `src/models.ts`
 

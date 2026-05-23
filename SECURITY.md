@@ -4,7 +4,7 @@
 
 Please **do not** open a public GitHub issue for security vulnerabilities.
 
-Report privately via GitHub's [security advisory](https://github.com/JescaLyn/openrouter-mcp/security/advisories/new) feature, or email the maintainer directly (see the commit log for contact info).
+Report privately via GitHub's [security advisory](https://github.com/JescaLyn/openrouter-mcp/security/advisories/new) feature.
 
 Include: a description of the issue, steps to reproduce, and the potential impact.
 
@@ -12,7 +12,7 @@ Include: a description of the issue, steps to reproduce, and the potential impac
 
 This server handles an OpenRouter API key. The recommended setup (Keychain on macOS, environment variable on Linux/Windows) keeps the key out of `~/.claude.json` and out of Claude's context. See [README.md § Install](README.md#2-install) for details.
 
-The project's `.claude/settings.local.json` denies `Bash(security *)`, `Read(.env)`, `Read(.env.*)`, `Read(.envrc)`, and `Bash(printenv OPENROUTER*)` to prevent accidental exfiltration via tool calls.
+The project's `.claude/settings.local.json` deny list blocks common exfiltration vectors — reading `.env*` files, running `security` keychain commands, and `printenv OPENROUTER*` — to prevent accidental credential leakage via tool calls.
 
 ## Scope
 

@@ -19,7 +19,7 @@ import { wrapUntrusted } from '../prompt.js';
 import { MAX_BASE64_BYTES, validateUserUrl } from '../security.js';
 import type { ChatRequest, ToolContext } from '../types.js';
 
-const IMAGE_INPUT_REGEX = /^(https?:\/\/.+|data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+)$/;
+const IMAGE_INPUT_REGEX = /^(https:\/\/.+|data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+)$/;
 
 export const definition = {
   name: 'analyze_image',

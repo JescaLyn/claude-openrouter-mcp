@@ -20,7 +20,7 @@ import { MAX_BASE64_BYTES, validateUserUrl } from '../security.js';
 import type { ChatRequest, ToolContext } from '../types.js';
 
 // URL or data:video/...;base64,...
-const VIDEO_INPUT_REGEX = /^(https?:\/\/.+|data:video\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+)$/;
+const VIDEO_INPUT_REGEX = /^(https:\/\/.+|data:video\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+)$/;
 
 export const definition = {
   name: 'analyze_video',

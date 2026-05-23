@@ -18,6 +18,7 @@ build/
 .vscode/
 
 .claude/settings.local.json
+.claude/UPDATE-PLAN.md
 
 # Local model probe artifacts
 /tmp/openrouter_models.json

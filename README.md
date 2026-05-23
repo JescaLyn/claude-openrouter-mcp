@@ -10,9 +10,9 @@ Sign up at [openrouter.ai/keys](https://openrouter.ai/keys). The free tier is en
 
 ### 2. Install
 
-**Option A — Claude Code plugin (planned).** Once published to npm, install via marketplace. The plugin prompts for your OpenRouter API key and stores it securely. Not yet available — use Option B for now.
+**Build from source and register the server with `claude mcp add`.** The goal is to keep your API key out of `~/.claude.json` so Claude cannot read it — both credential store approaches below achieve this.
 
-**Option B — Build from source.** Build from source and register the server with `claude mcp add`. The goal is to keep your API key out of `~/.claude.json` so Claude cannot read it — both credential store approaches below achieve this.
+> **Claude Code plugin (coming soon).** Once published to npm, install via marketplace — the plugin prompts for your key and stores it securely. Use the source install below in the meantime.
 
 ```bash
 # Clone, install, and build
@@ -20,7 +20,7 @@ git clone https://github.com/JescaLyn/openrouter-mcp && cd openrouter-mcp
 npm install && npm run build
 ```
 
-**Option B1 — Environment variable (all platforms):**
+**Option 1 — Environment variable (all platforms):**
 
 ```bash
 # 1. Create a helper script that reads from your environment
@@ -41,7 +41,7 @@ export OPENROUTER_API_KEY="sk-or-..."
 
 The key must be present in the shell environment when Claude Code launches.
 
-**Option B2 — macOS Keychain (recommended on Mac):**
+**Option 2 — macOS Keychain (recommended on Mac):**
 
 ```bash
 # 1. Store the key in Keychain (paste your API key when prompted)
@@ -95,7 +95,7 @@ You should see ~28 free models grouped by capability. If you get `MISSING_CREDEN
 - **Keychain approach (recommended):** Claude never sees the key. `~/.claude.json` stores the path to a helper script only. The helper script runs at server-spawn time; the key is retrieved from Keychain and injected directly into the server process environment, never entering Claude's context.
 - **`-e` flag approach (testing only):** Passing `-e OPENROUTER_API_KEY=...` to `claude mcp add` writes the key to `~/.claude.json` in plaintext. Claude can read that file. Use this only for local testing.
 - **Plugin (once published):** Key is handled via `userConfig` and stored securely by Claude Code; Claude never sees the plaintext value.
-- The project's `.claude/settings.local.json` denies `Bash(security *)`, `Read(.env*)`, and `printenv OPENROUTER*` to prevent accidental exfiltration via tool calls.
+- The project's `.claude/settings.local.json` deny list blocks common exfiltration vectors (reading `.env*` files, keychain commands, `printenv OPENROUTER*`) to prevent accidental credential leakage via tool calls.
 
 ## Why this MCP exists
 
@@ -176,7 +176,7 @@ That's it. No other configuration. The server picks sensible models per task; yo
 - [`docs/RESEARCH.md`](docs/RESEARCH.md) — consolidated research findings (free models, paid models, prior art, anti-patterns)
 - [`docs/TOOLS.md`](docs/TOOLS.md) — full tool API specifications
 - [`docs/MODELS.md`](docs/MODELS.md) — verified free model list, per-task curated map, refresh procedure
-- [`CLAUDE.md`](CLAUDE.md) — operational guide for Claude Code sessions (loaded automatically)
+- [`CLAUDE.md`](CLAUDE.md) — contributor guide for Claude Code sessions working on this repo (auto-loaded by Claude Code)
 
 ## Examples
 
