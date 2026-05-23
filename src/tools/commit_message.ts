@@ -1,5 +1,10 @@
 /**
- * commit_message — generate a single-line commit message from a staged diff.
+ * commit_message — generate a single-line commit message from a git diff.
+ *
+ * Accepts any diff format: staged (`git diff --cached`), unstaged (`git diff`),
+ * branch-to-branch (`git diff main..HEAD`), worktree diff, or a patch file.
+ * Pass `diff_context` to frame the instruction when the diff is not a simple
+ * staged unit (e.g. "last 3 commits" or "branch vs main").
  *
  * Routes through the `commit_message` task chain. Default style: past-tense
  * verbs, sentence case, ending with a period, parallel structure for
@@ -31,13 +36,19 @@ const SYSTEM_PROMPT = [
 export const definition = {
   name: 'commit_message',
   description:
-    "Generate a commit message from a staged diff via a curated free model. Default style: past-tense verbs, sentence case, ends with a period, parallel structure for multi-change ('Fixed X, added Y, and removed Z.'), plain ASCII, 'and' instead of symbols, describes what and why (not where). Pass `instructions` to append custom style rules on top of the default. Use after staging changes; pass `git diff --cached` output as `diff`. NOT for: writing PR descriptions or release notes — use Claude directly there.",
+    "Generate a commit message from a git diff via a curated free model. Accepts any diff format — staged (git diff --cached), branch-to-branch (git diff main..HEAD), worktree, or patch. Default style: past-tense verbs, sentence case, ends with a period, parallel structure for multi-change ('Fixed X, added Y, and removed Z.'), plain ASCII, 'and' instead of symbols, describes what and why (not where). Pass `diff_context` to describe the diff scope; pass `instructions` to append custom style rules. NOT for: writing PR descriptions or release notes — use Claude directly there.",
   inputSchema: {
     type: 'object',
     properties: {
       diff: {
         type: 'string',
-        description: 'Staged diff (output of `git diff --cached`).',
+        description:
+          'Any git diff output — staged (`git diff --cached`), unstaged (`git diff`), branch-to-branch (`git diff main..HEAD`), worktree diff, or a patch file.',
+      },
+      diff_context: {
+        type: 'string',
+        description:
+          "Describes what the diff represents. Examples: 'staged changes', 'branch vs main', 'worktree changes', 'last 3 commits'. Frames the commit message appropriately for multi-commit ranges vs. a single staged unit.",
       },
       instructions: {
         type: 'string',
@@ -63,6 +74,7 @@ export const definition = {
 
 const Args = z.object({
   diff: z.string().min(1),
+  diff_context: z.string().min(1).optional(),
   instructions: z.string().min(1).optional(),
   scope_hint: z.string().optional(),
   model: z.string().optional(),
@@ -86,7 +98,10 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
   if (args.scope_hint) {
     instructionParts.push(`Scope hint: ${args.scope_hint}`);
   }
-  instructionParts.push('Write a commit message for the following staged diff.');
+  const diffFrame = args.diff_context
+    ? `Write a commit message for the following diff (${args.diff_context}).`
+    : 'Write a commit message for the following staged diff.';
+  instructionParts.push(diffFrame);
   const instruction = instructionParts.join('\n');
 
   const messages = composeMessages({

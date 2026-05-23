@@ -276,10 +276,12 @@ Returns the regex + the validation results per example. On validation failure, r
 ```jsonc
 {
   "name": "commit_message",
-  "description": "Generate a commit message from a staged diff. Style is fixed: past-tense verbs, sentence case, ends with period, parallel structure for multi-change ('Fixed X, added Y, and removed Z.'), plain ASCII, 'and' not symbols. Describes what and why, not where.",
+  "description": "Generate a commit message from a git diff. Accepts any diff format — staged, branch-to-branch, worktree, or patch. Style is fixed: past-tense verbs, sentence case, ends with period, parallel structure for multi-change ('Fixed X, added Y, and removed Z.'), plain ASCII, 'and' not symbols. Describes what and why, not where. Use diff_context to describe the diff scope when passing non-staged diffs.",
   "params": {
-    "diff": "string (required) — staged diff (output of `git diff --cached`)",
+    "diff": "string (required) — any git diff output: staged (git diff --cached), unstaged (git diff), branch-to-branch (git diff main..HEAD), worktree diff, or a patch file",
+    "diff_context": "string? — describes what the diff represents, e.g. 'staged changes', 'branch vs main', 'worktree changes', 'last 3 commits'. Frames the message for multi-commit ranges vs. a single staged unit.",
     "scope_hint": "string? — repo or area hint, e.g. 'auth module' or 'frontend'",
+    "instructions": "string? — custom style rules appended to the default system prompt",
     "model": "string?",
     "allow_paid": "boolean? = false"
   }

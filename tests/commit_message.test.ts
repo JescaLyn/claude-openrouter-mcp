@@ -73,4 +73,36 @@ describe('commit_message handler', () => {
     expect(sysMsg.content).toContain('Write a single-line git commit message');
     expect(sysMsg.content).toContain('Custom style rules.');
   });
+
+  it('frames the instruction with diff_context when provided', async () => {
+    const { ctx, chain } = stubCtx();
+    await handler(
+      { diff: 'diff --git a/foo b/foo\n+hello', diff_context: 'branch vs main' },
+      ctx,
+    );
+    const callArgs = chain.mock.calls[0]?.[0];
+    const userMsg = callArgs.messages.find((m: { role: string }) => m.role === 'user');
+    expect(userMsg.content).toContain('branch vs main');
+    expect(userMsg.content).not.toContain('staged diff');
+  });
+
+  it('falls back to staged-diff framing when diff_context is omitted', async () => {
+    const { ctx, chain } = stubCtx();
+    await handler(
+      { diff: 'diff --git a/foo b/foo\n+hello' },
+      ctx,
+    );
+    const callArgs = chain.mock.calls[0]?.[0];
+    const userMsg = callArgs.messages.find((m: { role: string }) => m.role === 'user');
+    expect(userMsg.content).toContain('staged diff');
+  });
+
+  it('rejects empty diff_context', async () => {
+    const { ctx } = stubCtx();
+    const out = await handler(
+      { diff: 'diff --git a/foo b/foo\n+hello', diff_context: '' },
+      ctx,
+    );
+    expect(envelope(out).error.code).toBe('INVALID_INPUT');
+  });
 });

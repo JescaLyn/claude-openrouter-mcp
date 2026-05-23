@@ -90,18 +90,18 @@ This compares `src/models.ts` against the live `/api/frontend/models` endpoint a
 
 **Example update:**
 ```typescript
-// Before: qwen3-coder is no longer free
+// Before: oldvendor/model-a is no longer free
 code: {
-  free_primary: 'qwen/qwen3-coder',    // ← MODEL_NOT_FOUND
-  free_fallback: 'openai/gpt-oss-120b',
+  free_primary: 'oldvendor/model-a',    // ← MODEL_NOT_FOUND
+  free_fallback: 'newvendor/model-b',
   paid_escalation: 'anthropic/claude-haiku-4-5',
   paid_cost_note: 'claude-haiku-4-5 · ~$0.0045 per 2K-in/500-out call',
 },
 
-// After: Hy3 is the new free primary
+// After: promote the existing fallback; pick a new fallback from probe results
 code: {
-  free_primary: 'tencent/hy3-preview',
-  free_fallback: 'qwen/qwen3-coder',    // Moved to fallback
+  free_primary: 'newvendor/model-b',    // Promoted from fallback
+  free_fallback: 'newvendor/model-c',   // New fallback from probe list
   paid_escalation: 'anthropic/claude-haiku-4-5',
   paid_cost_note: 'claude-haiku-4-5 · ~$0.0045 per 2K-in/500-out call',
 },

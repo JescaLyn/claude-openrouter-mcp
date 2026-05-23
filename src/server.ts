@@ -20,6 +20,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 import { OpenRouterClient } from './client.js';
+import { probeModels } from './probe.js';
 import { error as errEnv, toolResult } from './envelope.js';
 // Foundation (3)
 import * as queryModelTool from './tools/query_model.js';
@@ -143,4 +144,11 @@ await server.connect(transport);
 
 console.error(
   `[${SERVER_NAME}] v${SERVER_VERSION} listening on stdio. ${TOOLS.length} tools registered.`,
+);
+
+// Warm startup probe: detect stale curated models early and log warnings to stderr.
+// Not awaited intentionally — the probe is read-only and does not affect correctness.
+// It has its own 10 s timeout and degrades to the bundled snapshot on failure.
+probeModels().catch((e) =>
+  console.error(`[probe] startup probe failed: ${e instanceof Error ? e.message : String(e)}`),
 );
