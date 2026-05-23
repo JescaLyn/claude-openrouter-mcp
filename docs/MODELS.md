@@ -1,6 +1,6 @@
 # Models — openrouter-mcp
 
-Per-task curated model map, paid-tier pricing, and the procedure for refreshing both. Source data verified against `https://openrouter.ai/api/frontend/models` on 2026-04-26. **OpenRouter's free tier shifts monthly — run `npm run probe:models` to verify the current state before relying on the list below.**
+Per-task curated model map, paid-tier pricing, and the procedure for refreshing both. Source data verified against `https://openrouter.ai/api/frontend/models` on 2026-05-23. **OpenRouter's free tier shifts monthly — run `npm run probe:models` to verify the current state before relying on the list below.**
 
 ## How to Refresh This Doc and `src/models.ts`
 
@@ -62,19 +62,20 @@ OpenRouter's UI Models page shows columns "Input ($/M)" and "Output ($/M)" — t
 
 **Always check all six fields before declaring a model free.**
 
-## Verified Free Models (28, as of 2026-04-26)
+## Verified Free Models (25, as of 2026-05-23)
 
-### Text-out (27)
+Three models went paid between April and May 2026: `baidu/qianfan-ocr-fast`, `google/gemma-3-27b-it`, `inclusionai/ling-2.6-1t`.
+
+### Text-out (24)
 
 | ID | Context | Input modalities | Notes |
 |---|---|---|---|
-| `inclusionai/ling-2.6-1t` | 262K | text | 1T params; long-context heavyweight |
-| `inclusionai/ling-2.6-flash` | 262K | text | Faster Ling variant |
+| `inclusionai/ling-2.6-flash` | 262K | text | Faster Ling variant; 1T sibling went paid |
 | `tencent/hy3-preview` | 262K | text | Strong on CJK languages, MMMLU 80.15 |
-| `nvidia/nemotron-3-super-120b-a12b` | 262K | text | MoE 120B/12B-active. Promising; too new for primary |
+| `nvidia/nemotron-3-super-120b-a12b` | 1M | text | MoE 120B/12B-active. Now used as reasoning primary |
 | `nvidia/nemotron-3-nano-30b-a3b` | 256K | text | MoE 30B/3B-active |
 | `nvidia/nemotron-nano-9b-v2` | 128K | text | Reasoning trace; disable via system prompt for classify |
-| `nvidia/nemotron-nano-12b-v2-vl` | 128K | text+image+video | Best free for video understanding |
+| `nvidia/nemotron-nano-12b-v2-vl` | 128K | text+image+video | Best free for video understanding; also OCR fallback |
 | `minimax/minimax-m2.5` | 196K | text | RPD 10K |
 | `qwen/qwen3-next-80b-a3b-instruct` | 262K | text | MoE 80B/3B-active. Excellent long-context primary |
 | `qwen/qwen3-coder` | 262K | text | Coding-tuned. RPM 8 |
@@ -87,20 +88,18 @@ OpenRouter's UI Models page shows columns "Input ($/M)" and "Output ($/M)" — t
 | `meta-llama/llama-3.3-70b-instruct` | 65K | text | Solid generalist; structured-outputs verified |
 | `meta-llama/llama-3.2-3b-instruct` | 131K | text | Fast small |
 | `nousresearch/hermes-3-llama-3.1-405b` | 131K | text | 405B params; heavy |
-| `google/gemma-4-26b-a4b-it` | 262K | text+image+video | MoE vision |
-| `google/gemma-4-31b-it` | 262K | text+image+video | Best free for visual reasoning |
-| `google/gemma-3-27b-it` | 131K | text+image | Best free for general translation |
+| `google/gemma-4-26b-a4b-it` | 262K | text+image+video | MoE vision; analyze_image fallback |
+| `google/gemma-4-31b-it` | 262K | text+image+video | Best free for visual reasoning; now also translate and OCR primary |
 | `google/gemma-3-12b-it` | 32K | text+image | |
 | `google/gemma-3-4b-it` | 32K | text+image | Small vision |
 | `google/gemma-3n-e4b-it` | 8K | text | Very small |
 | `google/gemma-3n-e2b-it` | 8K | text | Very small |
-| `baidu/qianfan-ocr-fast` | 65K | image+text | OCR specialist; #1 OmniDocBench |
 
-### Embeddings (1, not used)
+### Vision-only (1)
 
-| ID | Notes |
-|---|---|
-| `nvidia/llama-nemotron-embed-vl-1b-v2` | Multimodal embeddings; skipped (out of scope) |
+| ID | Context | Input modalities | Notes |
+|---|---|---|---|
+| `nvidia/llama-nemotron-embed-vl-1b-v2` | 131K | text+image | Multimodal embeddings; skipped (out of scope) |
 
 ### Image, audio, video, speech, rerank — 0 free models in any of these categories.
 
@@ -112,19 +111,19 @@ This is the data that goes into `src/models.ts`. Three layers per task: free pri
 |---|---|---|---|
 | `query_free` default | `openai/gpt-oss-120b` | `qwen/qwen3-next-80b-a3b-instruct` | `google/gemini-2.5-flash` ($0.30/$2.50) |
 | `summarize` (short, <8K) | `openai/gpt-oss-20b` | `nvidia/nemotron-nano-9b-v2` | `google/gemini-2.5-flash-lite` ($0.30/M) |
-| `summarize` (long, >32K) | `qwen/qwen3-next-80b-a3b-instruct` | `inclusionai/ling-2.6-1t` | `google/gemini-2.5-flash` ($0.30/$2.50) |
-| `query_long_context` (>100K) | `qwen/qwen3-next-80b-a3b-instruct` | `inclusionai/ling-2.6-1t` | `google/gemini-2.5-flash` (1M ctx) |
+| `summarize` (long, >32K) | `qwen/qwen3-next-80b-a3b-instruct` | `inclusionai/ling-2.6-flash` | `google/gemini-2.5-flash` ($0.30/$2.50) |
+| `query_long_context` (>100K) | `qwen/qwen3-next-80b-a3b-instruct` | `inclusionai/ling-2.6-flash` | `google/gemini-2.5-flash` (1M ctx) |
 | `extract` (JSON-schema) | `openai/gpt-oss-120b` | `meta-llama/llama-3.3-70b-instruct` | `mistralai/mistral-small-3.2-24b-instruct` ($0.075/$0.20) |
 | `classify` | `nvidia/nemotron-nano-9b-v2` | `meta-llama/llama-3.2-3b-instruct` | `openai/gpt-5-nano` ($0.05/$0.40) |
-| `translate` | `google/gemma-3-27b-it` | `tencent/hy3-preview` (CJK) | `google/gemini-2.5-flash` ($0.30/$2.50) |
+| `translate` | `google/gemma-4-31b-it` | `tencent/hy3-preview` (CJK) | `google/gemini-2.5-flash` ($0.30/$2.50) |
 | `rewrite` | `qwen/qwen3-next-80b-a3b-instruct` | `meta-llama/llama-3.3-70b-instruct` | `google/gemini-2.0-flash-001` ($0.10/$0.40) |
 | `explain_code` | `qwen/qwen3-coder` | `openai/gpt-oss-120b` | `anthropic/claude-haiku-4-5` ($1/$5) |
 | `generate_docstring` | `qwen/qwen3-coder` | `openai/gpt-oss-120b` | `anthropic/claude-haiku-4-5` |
 | `generate_regex` | `qwen/qwen3-coder` | `openai/gpt-oss-120b` | `anthropic/claude-haiku-4-5` |
 | `generate_sql` | `qwen/qwen3-coder` | `openai/gpt-oss-120b` | `anthropic/claude-haiku-4-5` |
 | `commit_message` | `openai/gpt-oss-20b` | `qwen/qwen3-coder` | `anthropic/claude-haiku-4-5` |
-| `extract_text` (OCR) | `baidu/qianfan-ocr-fast` | `google/gemma-3-27b-it` | `google/gemini-2.5-flash` (better non-Latin) |
-| `analyze_image` (visual reasoning) | `google/gemma-4-31b-it` | `google/gemma-3-27b-it` → `nvidia/nemotron-nano-12b-v2-vl` | `google/gemini-2.5-flash` |
+| `extract_text` (OCR) | `google/gemma-4-31b-it` | `nvidia/nemotron-nano-12b-v2-vl` | `google/gemini-2.5-flash` (better non-Latin) |
+| `analyze_image` (visual reasoning) | `google/gemma-4-31b-it` | `google/gemma-4-26b-a4b-it` | `google/gemini-2.5-flash` |
 | `read_pdf` | any free chat + `cloudflare-ai` engine | (engine handles fallback) | `engine: 'mistral-ocr'` ($2/1K pages) for scanned/complex |
 | `analyze_video` | `nvidia/nemotron-nano-12b-v2-vl` | `google/gemma-4-31b-it` | `google/gemini-2.5-flash` |
 
@@ -132,9 +131,10 @@ This is the data that goes into `src/models.ts`. Three layers per task: free pri
 
 - **`gpt-oss-120b` outperforms `qwen3-coder` on raw coding benchmark** (7.35 vs 6.8). We still keep Qwen primary because of 262K context and tool calling, but gpt-oss-120b is the *smart* fallback for hard typed-language work.
 - **Llama 3.3 70B is still a credible 2026 fallback** for structured outputs and multilingual work despite being a 2024 model. Newer ≠ better on the dimensions that matter.
-- **Nemotron-3-Super-120B looks great on paper but is too new** to use as primary. Promote after a month of observed stability.
-- **`tencent/hy3-preview` beats Gemma 3 on CJK** but is weaker elsewhere. Route translation by source/target language, not by single global default.
-- **Qianfan-OCR-Fast beats Gemini 3 Pro on OmniDocBench** (93.12 vs 90.33) — for OCR specifically, free is better than paid frontier.
+- **Nemotron-3-Super-120B (1M context) is now the reasoning primary** — promoted from "promising but too new" after a month of observed stability. Good for complex reasoning queries routed via `query_free --task_type reasoning`.
+- **`tencent/hy3-preview` beats Gemma 4 on CJK** but is weaker elsewhere. It's the translate fallback for CJK-heavy workloads; `gemma-4-31b-it` handles the general case.
+- **`google/gemma-4-31b-it` now serves three task chains**: visual reasoning primary (`analyze_image`), OCR primary (`extract_text`, replacing Qianfan-OCR-Fast which went paid), and translate primary (replacing Gemma 3-27b which went paid). It's the new workhorse for any task that requires vision or strong multilingual text.
+- **Qianfan-OCR-Fast was the #1 free OCR model** (OmniDocBench 93.12, beating Gemini 3 Pro at 90.33) but went paid in May 2026. The paid escalation path via `google/gemini-2.5-flash` remains available for production OCR workloads that need high accuracy.
 
 ## Paid Generation Pricing (Cost Annotations for Tool Descriptions)
 

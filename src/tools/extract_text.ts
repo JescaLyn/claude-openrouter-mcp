@@ -2,8 +2,8 @@
  * extract_text — OCR (image → verbatim text).
  *
  * Routes through the `extract_text` task chain. Free primary is
- * baidu/qianfan-ocr-fast — a specialist OCR model that beats general
- * vision models on transcription accuracy (#1 OmniDocBench v1.5).
+ * google/gemma-4-31b-it — the strongest free vision model after
+ * baidu/qianfan-ocr-fast went paid in May 2026.
  *
  * Builds a multimodal user message (text + image_url block) directly
  * instead of going through composeMessages, which only handles plain text.
@@ -25,7 +25,7 @@ const IMAGE_INPUT_REGEX = /^(https?:\/\/.+|data:image\/[a-zA-Z0-9.+-]+;base64,[A
 export const definition = {
   name: 'extract_text',
   description:
-    "Extract text verbatim from an image (OCR). Use for screenshots of code/error messages, photos of documents, OCR of UI captures, or any case where you need the literal text content. Specialist OCR model (Qianfan-OCR-Fast) is better than the visual-reasoning model for pure transcription. NOT for: visual reasoning, chart interpretation, or 'what is shown?' questions — use analyze_image instead.",
+    "Extract text verbatim from an image (OCR). Use for screenshots of code/error messages, photos of documents, OCR of UI captures, or any case where you need the literal text content. Routes through the free vision model chain. NOT for: visual reasoning, chart interpretation, or 'what is shown?' questions — use analyze_image instead.",
   inputSchema: {
     type: 'object',
     properties: {

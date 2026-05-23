@@ -11,11 +11,11 @@ function stubCtx() {
   const chatChain = vi.fn().mockResolvedValue({
     ok: true,
     content: 'transcribed text',
-    model_used: 'baidu/qianfan-ocr-fast',
+    model_used: 'google/gemma-4-31b-it',
     tokens_in: 5,
     tokens_out: 10,
     finish_reason: 'stop',
-    fallback_chain: ['baidu/qianfan-ocr-fast'],
+    fallback_chain: ['google/gemma-4-31b-it'],
     cost_usd: 0,
   });
   const ctx: ToolContext = {
@@ -50,7 +50,7 @@ describe('extract_text handler', () => {
       await handler({ image: 'https://example.com/page.png' }, ctx),
     );
     expect(env.result).toBe('transcribed text');
-    expect(env.model_used).toBe('baidu/qianfan-ocr-fast');
+    expect(env.model_used).toBe('google/gemma-4-31b-it');
     expect(chatChain).toHaveBeenCalledTimes(1);
   });
 

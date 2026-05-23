@@ -2,8 +2,8 @@
  * analyze_image — visual reasoning over an image.
  *
  * Routes through the `analyze_image` task chain. Free primary is
- * google/gemma-4-31b-it (vision-reasoning tuned), with gemma-3-27b-it
- * as a fallback.
+ * google/gemma-4-31b-it (vision-reasoning tuned), with gemma-4-26b-a4b-it
+ * (MoE vision) as fallback.
  *
  * Use for UI mockup interpretation, diagram understanding, chart reading,
  * screenshot debugging — anything where you ask a question ABOUT the image

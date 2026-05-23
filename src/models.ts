@@ -9,7 +9,7 @@
  * response (see src/probe.ts) and is hand-maintained as an anti-pattern flagged
  * in the prior-art audit. We only store ids and cost annotations.
  *
- * Source data: docs/MODELS.md, verified against /api/frontend/models on 2026-04-26.
+ * Source data: docs/MODELS.md, verified against /api/frontend/models on 2026-05-23.
  */
 
 import type { TaskModelChain, TaskType } from './types.js';
@@ -23,7 +23,7 @@ export const TASK_MODELS: Record<TaskType, TaskModelChain> = {
     paid_cost_note: 'gemini-2.5-flash · ~$0.0024 per 2K-in/500-out call',
   },
   reasoning: {
-    free_primary: 'inclusionai/ling-2.6-1t',
+    free_primary: 'nvidia/nemotron-3-super-120b-a12b',
     free_fallback: 'qwen/qwen3-next-80b-a3b-instruct',
     paid_escalation: 'anthropic/claude-haiku-4-5',
     paid_cost_note: 'claude-haiku-4-5 · ~$0.0045 per 2K-in/500-out call',
@@ -36,7 +36,7 @@ export const TASK_MODELS: Record<TaskType, TaskModelChain> = {
   },
   long_context: {
     free_primary: 'qwen/qwen3-next-80b-a3b-instruct',
-    free_fallback: 'inclusionai/ling-2.6-1t',
+    free_fallback: 'inclusionai/ling-2.6-flash',
     paid_escalation: 'google/gemini-2.5-flash',
     paid_cost_note: 'gemini-2.5-flash · 1M ctx · varies with input size',
   },
@@ -64,7 +64,7 @@ export const TASK_MODELS: Record<TaskType, TaskModelChain> = {
   },
   summarize_long: {
     free_primary: 'qwen/qwen3-next-80b-a3b-instruct',
-    free_fallback: 'inclusionai/ling-2.6-1t',
+    free_fallback: 'inclusionai/ling-2.6-flash',
     paid_escalation: 'google/gemini-2.5-flash',
     paid_cost_note: 'gemini-2.5-flash · 1M ctx · varies with input size',
   },
@@ -82,8 +82,8 @@ export const TASK_MODELS: Record<TaskType, TaskModelChain> = {
     paid_cost_note: 'gpt-5-nano · ~$0.0003 per 2K-in/500-out call',
   },
   translate: {
-    free_primary: 'google/gemma-3-27b-it',
-    free_fallback: 'meta-llama/llama-3.3-70b-instruct',
+    free_primary: 'google/gemma-4-31b-it',
+    free_fallback: 'tencent/hy3-preview',
     paid_escalation: 'google/gemini-2.5-flash',
     paid_cost_note: 'gemini-2.5-flash · ~$0.0024 per 2K-in/500-out call',
   },
@@ -96,14 +96,15 @@ export const TASK_MODELS: Record<TaskType, TaskModelChain> = {
 
   // ── Multimodal input ─────────────────────────────────────────────────────
   extract_text: {
-    free_primary: 'baidu/qianfan-ocr-fast',
-    free_fallback: 'google/gemma-3-27b-it',
+    // No dedicated free OCR model remains; gemma-4-31b-it is the strongest free vision model.
+    free_primary: 'google/gemma-4-31b-it',
+    free_fallback: 'nvidia/nemotron-nano-12b-v2-vl',
     paid_escalation: 'google/gemini-2.5-flash',
     paid_cost_note: 'gemini-2.5-flash · ~$0.0024 per call (image included)',
   },
   analyze_image: {
     free_primary: 'google/gemma-4-31b-it',
-    free_fallback: 'google/gemma-3-27b-it',
+    free_fallback: 'google/gemma-4-26b-a4b-it',
     paid_escalation: 'google/gemini-2.5-flash',
     paid_cost_note: 'gemini-2.5-flash · ~$0.0024 per call (image included)',
   },
