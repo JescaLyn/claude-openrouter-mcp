@@ -80,6 +80,8 @@ export interface TaskModelChain {
  */
 export interface ToolContext {
   client: import('./client.js').OpenRouterClient;
+  /** AbortSignal from the MCP transport — fires when the client disconnects or cancels. */
+  signal?: AbortSignal;
 }
 
 /**

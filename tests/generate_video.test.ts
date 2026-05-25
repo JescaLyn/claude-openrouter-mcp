@@ -159,4 +159,24 @@ describe('generate_video — paid lifecycle', () => {
     const env = parseEnvelope(result);
     expect(env.error.code).toBe('MODEL_NOT_FOUND');
   });
+
+  it('exits the poll loop and returns UPSTREAM_TIMEOUT when the request is aborted', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      createResponse({ id: 'job-abort', polling_url: 'https://openrouter.ai/api/v1/videos/job-abort', status: 'pending' }),
+    );
+
+    const ac = new AbortController();
+    const abortCtx = { client: new OpenRouterClient({ apiKey: 'test-key' }), signal: ac.signal };
+    const promise = handler({ prompt: 'x', allow_paid: true }, abortCtx);
+
+    // Abort synchronously — signal is aborted before the create-fetch microtask resolves,
+    // so by the time the while loop's first condition check runs, signal.aborted is true.
+    ac.abort();
+    const result = await promise;
+    const env = parseEnvelope(result);
+
+    expect(env.error.code).toBe('UPSTREAM_TIMEOUT');
+    expect(env.error.message).toContain('cancelled');
+    expect(fetchSpy).toHaveBeenCalledTimes(1); // job created, no polls ran
+  });
 });

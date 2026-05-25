@@ -188,7 +188,7 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
   const apiKey = ctx.client.getApiKey();
 
   try {
-    return await runVideoJob(apiKey, modelId, args, estimate);
+    return await runVideoJob(apiKey, modelId, args, estimate, ctx.signal);
   } catch (e) {
     return toolResult(unknownError(e, 'generate_video'));
   }
@@ -199,6 +199,7 @@ async function runVideoJob(
   modelId: string,
   args: z.infer<typeof Args>,
   estimate: CostEstimate,
+  signal?: AbortSignal,
 ) {
   // ── Step 1: kick off the job ──────────────────────────────────────────────
   const createBody = {
@@ -311,8 +312,9 @@ async function runVideoJob(
   const deadline = Date.now() + args.poll_timeout_seconds * 1000;
   let lastStatus: string = createData.status ?? 'pending';
 
-  while (Date.now() < deadline) {
-    await sleep(POLL_INTERVAL_MS);
+  while (Date.now() < deadline && !signal?.aborted) {
+    await sleep(POLL_INTERVAL_MS, signal);
+    if (signal?.aborted) break;
 
     let pollRes: Response;
     try {
@@ -391,18 +393,26 @@ async function runVideoJob(
     // pending / running / unknown — keep polling.
   }
 
-  // Deadline hit. Surface UPSTREAM_TIMEOUT with the polling URL so the caller
-  // can poll later — billing has already happened on upstream.
+  // Loop exited — either the deadline elapsed or the MCP client cancelled.
+  // In both cases billing has already happened upstream; surface the polling URL.
+  const timeoutMessage = signal?.aborted
+    ? `Video job ${jobId} polling stopped because the request was cancelled (job is still running upstream and may complete).`
+    : `Video job ${jobId} did not complete within ${args.poll_timeout_seconds}s (last status: ${lastStatus}). Job is still running upstream and may complete; poll the URL manually.`;
+
   return toolResult(
     error({
       code: 'UPSTREAM_TIMEOUT',
-      message: `Video job ${jobId} did not complete within ${args.poll_timeout_seconds}s (last status: ${lastStatus}). Job is still running upstream and may complete; poll the URL manually.`,
+      message: timeoutMessage,
       retryable: true,
       suggested_action: `GET ${pollingUrl} with your bearer token to check status; on completed, read unsigned_urls[0].`,
     }),
   );
 }
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve) => {
+    if (signal?.aborted) { resolve(); return; }
+    const id = setTimeout(resolve, ms);
+    signal?.addEventListener('abort', () => { clearTimeout(id); resolve(); }, { once: true });
+  });
 }

@@ -120,7 +120,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: TOOLS.map((t) => t.definition),
 }));
 
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
   const apiKey = getApiKey();
   if (!apiKey) return missingCredentialResult();
 
@@ -140,6 +140,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   // model IDs used to gate chatDirect on named-tool model overrides.
   const ctx: ToolContext = {
     client: new OpenRouterClient({ apiKey, freeModelIds: cachedFreeModelIds }),
+    signal: extra.signal,
   };
 
   return tool.handler(request.params.arguments ?? {}, ctx);
