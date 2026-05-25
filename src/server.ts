@@ -20,7 +20,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 import { OpenRouterClient } from './client.js';
-import { probeModels } from './probe.js';
+import { probeModels, freeModels } from './probe.js';
 import { error as errEnv, toolResult } from './envelope.js';
 // Foundation (3)
 import * as queryModelTool from './tools/query_model.js';
@@ -52,7 +52,12 @@ import * as transcribeTool from './tools/transcribe.js';
 import type { ToolContext } from './types.js';
 
 const SERVER_NAME = 'openrouter-mcp';
-const SERVER_VERSION = '0.1.0';
+const SERVER_VERSION = '0.1.1';
+
+// Populated by the startup probe once it resolves. Used to gate chatDirect on
+// named-tool model overrides. Undefined until the probe completes — callers
+// degrade gracefully (no gate) until then.
+let cachedFreeModelIds: Set<string> | undefined;
 
 // All 22 registered tools — definition + handler.
 const TOOLS = [
@@ -131,9 +136,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 
   // Build per-call context with a fresh DI'd client. The client carries the
-  // API key but no other state — safe to instantiate per call.
+  // API key and, once the startup probe resolves, the set of verified free
+  // model IDs used to gate chatDirect on named-tool model overrides.
   const ctx: ToolContext = {
-    client: new OpenRouterClient({ apiKey }),
+    client: new OpenRouterClient({ apiKey, freeModelIds: cachedFreeModelIds }),
   };
 
   return tool.handler(request.params.arguments ?? {}, ctx);
@@ -146,9 +152,13 @@ console.error(
   `[${SERVER_NAME}] v${SERVER_VERSION} listening on stdio. ${TOOLS.length} tools registered.`,
 );
 
-// Warm startup probe: detect stale curated models early and log warnings to stderr.
-// Not awaited intentionally — the probe is read-only and does not affect correctness.
-// It has its own 10 s timeout and degrades to the bundled snapshot on failure.
-probeModels().catch((e) =>
-  console.error(`[probe] startup probe failed: ${e instanceof Error ? e.message : String(e)}`),
-);
+// Warm startup probe: detect stale curated models and populate the free model cache
+// used by chatDirect's allow_paid gate. Not awaited — the probe is read-only and
+// correctness degrades gracefully (no gate) until it resolves.
+probeModels()
+  .then((result) => {
+    cachedFreeModelIds = new Set(freeModels(result).map((m) => m.id));
+  })
+  .catch((e) =>
+    console.error(`[probe] startup probe failed: ${e instanceof Error ? e.message : String(e)}`),
+  );

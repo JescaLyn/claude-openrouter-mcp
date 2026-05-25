@@ -117,6 +117,7 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
         messages,
         max_tokens: 1024,
         temperature: 0.2,
+        allow_paid: args.allow_paid,
       });
       if (!result.ok) return toolResult(result.envelope);
       return toolResult(

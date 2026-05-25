@@ -127,6 +127,7 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
         model: args.model,
         messages,
         temperature: 0.3,
+        allow_paid: args.allow_paid,
       });
       if (!result.ok) return toolResult(result.envelope);
       return toolResult(

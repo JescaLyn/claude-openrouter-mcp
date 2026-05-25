@@ -73,14 +73,12 @@ describe('generate_video — paid lifecycle', () => {
   beforeEach(() => {
     fetchSpy = vi.fn();
     vi.stubGlobal('fetch', fetchSpy);
-    process.env.OPENROUTER_API_KEY = 'test-key';
     vi.useFakeTimers();
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.useRealTimers();
-    delete process.env.OPENROUTER_API_KEY;
   });
 
   function createResponse(body: object, status = 200) {
@@ -160,12 +158,5 @@ describe('generate_video — paid lifecycle', () => {
     );
     const env = parseEnvelope(result);
     expect(env.error.code).toBe('MODEL_NOT_FOUND');
-  });
-
-  it('returns MISSING_CREDENTIAL when key absent', async () => {
-    delete process.env.OPENROUTER_API_KEY;
-    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
-    const env = parseEnvelope(result);
-    expect(env.error.code).toBe('MISSING_CREDENTIAL');
   });
 });

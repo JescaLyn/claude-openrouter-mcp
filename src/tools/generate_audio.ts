@@ -114,7 +114,7 @@ function estimateAudioCost(modelId: string, charCount: number): CostEstimate {
   };
 }
 
-export async function handler(rawArgs: unknown, _ctx: ToolContext) {
+export async function handler(rawArgs: unknown, ctx: ToolContext) {
   const parsed = Args.safeParse(rawArgs);
   if (!parsed.success) {
     return toolResult(
@@ -143,16 +143,7 @@ export async function handler(rawArgs: unknown, _ctx: ToolContext) {
     );
   }
 
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey || apiKey.trim() === '') {
-    return toolResult(
-      error({
-        code: 'MISSING_CREDENTIAL',
-        message: 'OPENROUTER_API_KEY is not set.',
-        suggested_action: 'Set OPENROUTER_API_KEY in your .mcp.json env block.',
-      }),
-    );
-  }
+  const apiKey = ctx.client.getApiKey();
 
   try {
     return await callTtsEndpoint(apiKey, modelId, args, estimate);

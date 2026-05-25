@@ -60,15 +60,22 @@ export interface ChainOptions extends ChatOptions {
 
 export interface DirectOptions extends ChatOptions {
   model: string;
+  /** When true, bypass the free-model gate for this call. */
   allow_paid?: boolean;
-  /** When false, do not attempt paid even if the model is paid (still subject to allow_paid). */
 }
 
 export class OpenRouterClient {
   private readonly apiKey: string;
+  private readonly freeModelIds?: Set<string>;
 
-  constructor(opts: { apiKey: string }) {
+  constructor(opts: { apiKey: string; freeModelIds?: Set<string> }) {
     this.apiKey = opts.apiKey;
+    this.freeModelIds = opts.freeModelIds;
+  }
+
+  /** Returns the API key passed at construction. Used by paid tools to avoid re-reading process.env. */
+  getApiKey(): string {
+    return this.apiKey;
   }
 
   /**
@@ -144,11 +151,31 @@ export class OpenRouterClient {
   }
 
   /**
-   * Direct call to a single model — used by query_model when the caller
-   * explicitly picks the model. Still applies 429 retry but NO chain fallback.
+   * Direct call to a single model — used when the caller explicitly picks a model.
+   * Still applies 429 retry but NO chain fallback.
+   *
+   * When probe data is available (freeModelIds populated at startup), gates unrecognized
+   * models behind allow_paid: true to prevent accidental paid model invocations from
+   * named-tool model overrides.
    */
   async chatDirect(opts: DirectOptions): Promise<ClientResult> {
     const { model, allow_paid = false, ...rest } = opts;
+
+    if (this.freeModelIds && !this.freeModelIds.has(model) && !allow_paid) {
+      return {
+        ok: false,
+        envelope: errEnv({
+          code: 'PAID_CONFIRMATION_REQUIRED',
+          message: `Model '${model}' is not in the verified free list. Calling it may incur charges.`,
+          retryable: true,
+          suggested_action: 'Retry with allow_paid: true after surfacing the cost to the user and getting approval.',
+          estimated_cost_usd: 0,
+          cost_breakdown: 'Cost unknown — model is not in the verified free list.',
+        }),
+        fallback_chain: [model],
+      };
+    }
+
     const result = await this.callModelWith429Retry({ model, ...rest });
     if (result.ok) {
       // We don't know if this model is paid without a probe lookup; be conservative.

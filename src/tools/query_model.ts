@@ -96,6 +96,7 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
       messages,
       max_tokens: args.max_tokens,
       temperature: args.temperature,
+      allow_paid: true,
       ...(args.extra && { extra: args.extra }),
     });
 

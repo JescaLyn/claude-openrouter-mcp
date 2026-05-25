@@ -1,6 +1,6 @@
 {
   "name": "openrouter-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server exposing OpenRouter models as named tools for Claude Code. Free models for routine work; paid options gated behind explicit per-call user approval.",
   "type": "module",
   "bin": {

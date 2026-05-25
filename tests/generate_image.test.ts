@@ -68,12 +68,10 @@ describe('generate_image — paid path', () => {
   beforeEach(() => {
     fetchSpy = vi.fn();
     vi.stubGlobal('fetch', fetchSpy);
-    process.env.OPENROUTER_API_KEY = 'test-key';
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
-    delete process.env.OPENROUTER_API_KEY;
   });
 
   it('strips data: prefix and returns image_base64 + mime_type', async () => {
@@ -119,12 +117,5 @@ describe('generate_image — paid path', () => {
     );
     const env = parseEnvelope(result);
     expect(env.error.code).toBe('MODEL_NOT_FOUND');
-  });
-
-  it('returns MISSING_CREDENTIAL when key absent', async () => {
-    delete process.env.OPENROUTER_API_KEY;
-    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
-    const env = parseEnvelope(result);
-    expect(env.error.code).toBe('MISSING_CREDENTIAL');
   });
 });

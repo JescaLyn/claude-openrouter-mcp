@@ -203,3 +203,73 @@ describe('OpenRouterClient.chatDirect', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('OpenRouterClient.chatDirect — free model gate', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('returns PAID_CONFIRMATION_REQUIRED when model is not in freeModelIds and allow_paid is false', async () => {
+    const client = new OpenRouterClient({
+      apiKey: 'test-key',
+      freeModelIds: new Set(['free/model-a']),
+    });
+    const result = await client.chatDirect({
+      model: 'paid/some-model',
+      messages: [{ role: 'user', content: 'hi' }],
+    });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.envelope.error.code).toBe('PAID_CONFIRMATION_REQUIRED');
+    expect(result.envelope.error.retryable).toBe(true);
+    expect(result.envelope.error.estimated_cost_usd).toBe(0);
+    expect(result.envelope.error.cost_breakdown).toBeDefined();
+    expect(result.fallback_chain).toEqual(['paid/some-model']);
+  });
+
+  it('passes through when model IS in freeModelIds', async () => {
+    const fetchSpy = vi.fn().mockResolvedValueOnce(okResponse('free hit'));
+    vi.stubGlobal('fetch', fetchSpy);
+    const client = new OpenRouterClient({
+      apiKey: 'test-key',
+      freeModelIds: new Set(['free/model-a']),
+    });
+    const result = await client.chatDirect({
+      model: 'free/model-a',
+      messages: [{ role: 'user', content: 'hi' }],
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.content).toBe('free hit');
+  });
+
+  it('passes through when freeModelIds is undefined (probe not ready)', async () => {
+    const fetchSpy = vi.fn().mockResolvedValueOnce(okResponse('no gate'));
+    vi.stubGlobal('fetch', fetchSpy);
+    const client = new OpenRouterClient({ apiKey: 'test-key' });
+    const result = await client.chatDirect({
+      model: 'paid/some-model',
+      messages: [{ role: 'user', content: 'hi' }],
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.content).toBe('no gate');
+  });
+
+  it('passes through when allow_paid is true even if model is not in freeModelIds', async () => {
+    const fetchSpy = vi.fn().mockResolvedValueOnce(okResponse('paid approved'));
+    vi.stubGlobal('fetch', fetchSpy);
+    const client = new OpenRouterClient({
+      apiKey: 'test-key',
+      freeModelIds: new Set(['free/model-a']),
+    });
+    const result = await client.chatDirect({
+      model: 'paid/some-model',
+      allow_paid: true,
+      messages: [{ role: 'user', content: 'hi' }],
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.content).toBe('paid approved');
+  });
+});

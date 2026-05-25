@@ -114,7 +114,7 @@ export async function handler(rawArgs: unknown, ctx: ToolContext) {
     const callOpts = { messages, temperature: 0.2 };
 
     const result = args.model
-      ? await ctx.client.chatDirect({ model: args.model, ...callOpts })
+      ? await ctx.client.chatDirect({ model: args.model, allow_paid: args.allow_paid, ...callOpts })
       : await ctx.client.chatChain({
           chain: chainFor('translate'),
           allow_paid: args.allow_paid,

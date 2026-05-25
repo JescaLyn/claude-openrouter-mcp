@@ -59,12 +59,10 @@ describe('generate_audio — paid path', () => {
   beforeEach(() => {
     fetchSpy = vi.fn();
     vi.stubGlobal('fetch', fetchSpy);
-    process.env.OPENROUTER_API_KEY = 'test-key';
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
-    delete process.env.OPENROUTER_API_KEY;
   });
 
   it('reads raw bytes and base64-encodes them', async () => {
@@ -99,12 +97,5 @@ describe('generate_audio — paid path', () => {
     const env = parseEnvelope(result);
     expect(env.error.code).toBe('UPSTREAM_HTTP');
     expect(env.error.message).toContain('Empty');
-  });
-
-  it('returns MISSING_CREDENTIAL when key absent', async () => {
-    delete process.env.OPENROUTER_API_KEY;
-    const result = await handler({ text: 'hi', allow_paid: true }, ctx);
-    const env = parseEnvelope(result);
-    expect(env.error.code).toBe('MISSING_CREDENTIAL');
   });
 });
