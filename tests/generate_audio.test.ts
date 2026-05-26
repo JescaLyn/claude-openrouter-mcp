@@ -98,4 +98,40 @@ describe('generate_audio — paid path', () => {
     expect(env.error.code).toBe('UPSTREAM_HTTP');
     expect(env.error.message).toContain('Empty');
   });
+
+  it('returns MODEL_NOT_FOUND on 404', async () => {
+    fetchSpy.mockResolvedValueOnce(new Response('not found', { status: 404 }));
+    const result = await handler(
+      { text: 'hi', model: 'unknown/tts-model', allow_paid: true },
+      ctx,
+    );
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('MODEL_NOT_FOUND');
+    expect(env.error.retryable).toBe(false);
+  });
+
+  it('returns RATE_LIMITED on 429', async () => {
+    fetchSpy.mockResolvedValueOnce(new Response('rate limited', { status: 429 }));
+    const result = await handler({ text: 'hi', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('RATE_LIMITED');
+    expect(env.error.retryable).toBe(true);
+  });
+
+  it('returns retryable UPSTREAM_HTTP on 503', async () => {
+    fetchSpy.mockResolvedValueOnce(new Response('service unavailable', { status: 503 }));
+    const result = await handler({ text: 'hi', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+    expect(env.error.retryable).toBe(true);
+  });
+
+  it('returns UPSTREAM_TIMEOUT when fetch throws a TimeoutError', async () => {
+    const timeoutErr = Object.assign(new Error('timeout'), { name: 'TimeoutError' });
+    fetchSpy.mockRejectedValueOnce(timeoutErr);
+    const result = await handler({ text: 'hi', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_TIMEOUT');
+    expect(env.error.retryable).toBe(true);
+  });
 });

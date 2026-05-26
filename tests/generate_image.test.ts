@@ -118,4 +118,89 @@ describe('generate_image — paid path', () => {
     const env = parseEnvelope(result);
     expect(env.error.code).toBe('MODEL_NOT_FOUND');
   });
+
+  it('returns RATE_LIMITED on 429', async () => {
+    fetchSpy.mockResolvedValueOnce(new Response('rate limited', { status: 429 }));
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('RATE_LIMITED');
+    expect(env.error.retryable).toBe(true);
+  });
+
+  it('returns UPSTREAM_TIMEOUT when fetch throws a TimeoutError', async () => {
+    const timeoutErr = Object.assign(new Error('timeout'), { name: 'TimeoutError' });
+    fetchSpy.mockRejectedValueOnce(timeoutErr);
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_TIMEOUT');
+    expect(env.error.retryable).toBe(true);
+  });
+
+  it('returns UPSTREAM_HTTP when response body is non-JSON', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response('not json at all', { status: 200, headers: { 'content-type': 'text/html' } }),
+    );
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+    expect(env.error.retryable).toBe(true);
+  });
+
+  it('returns UPSTREAM_HTTP when response has no image_url', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          choices: [{ message: { images: [] }, finish_reason: 'stop' }],
+          usage: { prompt_tokens: 5, completion_tokens: 0 },
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+  });
+
+  it('sends multipart content array when reference_image is provided', async () => {
+    const fakeBase64 = 'aGVsbG8=';
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          choices: [
+            {
+              message: {
+                images: [{ image_url: { url: `data:image/png;base64,${fakeBase64}` } }],
+              },
+              finish_reason: 'stop',
+            },
+          ],
+          usage: { prompt_tokens: 12, completion_tokens: 0 },
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+    await handler(
+      {
+        prompt: 'modify this',
+        reference_image: 'https://example.com/ref.png',
+        allow_paid: true,
+      },
+      ctx,
+    );
+    const body = JSON.parse(fetchSpy.mock.calls[0]![1].body as string);
+    expect(Array.isArray(body.messages[0].content)).toBe(true);
+    const contentBlocks = body.messages[0].content as Array<{ type: string; image_url?: { url: string } }>;
+    expect(contentBlocks.some((b) => b.type === 'image_url')).toBe(true);
+    expect(contentBlocks.find((b) => b.type === 'image_url')?.image_url?.url).toBe('https://example.com/ref.png');
+  });
+});
+
+describe('generate_image — cost confirmation (unknown model)', () => {
+  it('uses $0.10 defensive estimate for an unrecognised model id', async () => {
+    const result = await handler({ prompt: 'x', model: 'unknown/image-model' }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('PAID_CONFIRMATION_REQUIRED');
+    expect(env.error.estimated_cost_usd).toBe(0.10);
+    expect(env.error.cost_breakdown).toContain('defensive estimate');
+  });
 });

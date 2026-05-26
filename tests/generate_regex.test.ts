@@ -136,6 +136,52 @@ describe('generate_regex handler — retry behavior', () => {
     expect(chatChain).toHaveBeenCalledTimes(2);
   });
 
+  it('surfaces upstream error on first attempt as-is', async () => {
+    const chatChain = vi.fn().mockResolvedValue({
+      ok: false,
+      envelope: { error: { code: 'UPSTREAM_HTTP', message: 'upstream failed', retryable: true, suggested_action: 'retry' } },
+      fallback_chain: ['free/primary'],
+    });
+    const ctx: ToolContext = {
+      client: { chatChain, chatDirect: vi.fn() } as unknown as ToolContext['client'],
+    };
+    const out = await handler(
+      { description: 'match foo', positive_examples: ['foo'] },
+      ctx,
+    );
+    expect(envelope(out).error.code).toBe('UPSTREAM_HTTP');
+    expect(chatChain).toHaveBeenCalledTimes(1);
+  });
+
+  it('surfaces upstream error on second attempt as-is', async () => {
+    // First attempt returns a failing pattern, second attempt returns an error.
+    const chatChain = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        content: '^bar$',
+        model_used: 'free/primary',
+        tokens_in: 10,
+        tokens_out: 5,
+        finish_reason: 'stop',
+        fallback_chain: ['free/primary'],
+        cost_usd: 0,
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        envelope: { error: { code: 'RATE_LIMITED', message: 'rate limited', retryable: true, suggested_action: 'retry' } },
+        fallback_chain: ['free/primary'],
+      });
+    const ctx: ToolContext = {
+      client: { chatChain, chatDirect: vi.fn() } as unknown as ToolContext['client'],
+    };
+    const out = await handler(
+      { description: 'match foo', positive_examples: ['foo'] },
+      ctx,
+    );
+    expect(envelope(out).error.code).toBe('RATE_LIMITED');
+    expect(chatChain).toHaveBeenCalledTimes(2);
+  });
+
   it('strips code fences and slash delimiters from the model output', async () => {
     const chatChain = stubChain('```regex\n^foo$\n```');
     const ctx: ToolContext = {

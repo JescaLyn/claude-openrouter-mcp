@@ -48,6 +48,21 @@ describe('generate_sql handler', () => {
     expect(envelope(out).error.code).toBe('INVALID_INPUT');
   });
 
+  it('surfaces upstream error from chatChain as-is', async () => {
+    const errCtx = {
+      client: {
+        chatChain: vi.fn().mockResolvedValue({
+          ok: false,
+          envelope: { error: { code: 'UPSTREAM_HTTP', message: 'upstream failed', retryable: true } },
+          fallback_chain: ['free/primary'],
+        }),
+        chatDirect: vi.fn(),
+      } as unknown as ToolContext['client'],
+    };
+    const out = await handler({ schema: 'CREATE TABLE t (id INT);', intent: 'count rows' }, errCtx);
+    expect(envelope(out).error.code).toBe('UPSTREAM_HTTP');
+  });
+
   it('returns success with valid args', async () => {
     const out = await handler(
       { schema: 'CREATE TABLE t (id INT);', intent: 'count rows', dialect: 'sqlite' },

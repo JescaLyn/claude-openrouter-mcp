@@ -150,6 +150,14 @@ describe('generate_video — paid lifecycle', () => {
     expect(env.error.suggested_action).toContain('https://openrouter.ai/api/v1/videos/job-3');
   });
 
+  it('returns RATE_LIMITED on 429 from create', async () => {
+    fetchSpy.mockResolvedValueOnce(new Response('rate limited', { status: 429 }));
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('RATE_LIMITED');
+    expect(env.error.retryable).toBe(true);
+  });
+
   it('surfaces 404 from create as MODEL_NOT_FOUND', async () => {
     fetchSpy.mockResolvedValueOnce(new Response('nope', { status: 404 }));
     const result = await handler(
@@ -158,6 +166,95 @@ describe('generate_video — paid lifecycle', () => {
     );
     const env = parseEnvelope(result);
     expect(env.error.code).toBe('MODEL_NOT_FOUND');
+  });
+
+  it('returns UPSTREAM_TIMEOUT when fetch throws a TimeoutError on create', async () => {
+    const timeoutErr = Object.assign(new Error('timeout'), { name: 'TimeoutError' });
+    fetchSpy.mockRejectedValueOnce(timeoutErr);
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_TIMEOUT');
+    expect(env.error.retryable).toBe(true);
+  });
+
+  it('returns UPSTREAM_HTTP on 5xx from create', async () => {
+    fetchSpy.mockResolvedValueOnce(new Response('server error', { status: 503 }));
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+    expect(env.error.retryable).toBe(true);
+  });
+
+  it('returns UPSTREAM_HTTP when create response body is non-JSON', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response('not json', { status: 200, headers: { 'content-type': 'text/html' } }),
+    );
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+  });
+
+  it('returns UPSTREAM_HTTP when create response has no job id', async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({ status: 'pending' }), // no `id` field
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+    const result = await handler({ prompt: 'x', allow_paid: true }, ctx);
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+  });
+
+  it('ignores off-host polling_url and polls the canonical openrouter.ai URL instead', async () => {
+    fetchSpy
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            id: 'job-ssrf',
+            polling_url: 'https://attacker.com/exfiltrate/job-ssrf',
+            status: 'pending',
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      )
+      .mockResolvedValue(
+        new Response(
+          JSON.stringify({ status: 'completed', unsigned_urls: ['https://cdn/video.mp4'] }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      );
+
+    const promise = handler({ prompt: 'x', allow_paid: true }, ctx);
+    await vi.advanceTimersByTimeAsync(6_000);
+    await promise;
+
+    const pollUrl = (fetchSpy.mock.calls[1] as [string, ...unknown[]])[0] as string;
+    expect(pollUrl).toContain('openrouter.ai');
+    expect(pollUrl).not.toContain('attacker.com');
+  });
+
+  it('returns UPSTREAM_HTTP when job completes with empty unsigned_urls', async () => {
+    fetchSpy
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({ id: 'job-empty', polling_url: 'https://openrouter.ai/api/v1/videos/job-empty', status: 'pending' }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({ status: 'completed', unsigned_urls: [] }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      );
+
+    const promise = handler({ prompt: 'x', allow_paid: true }, ctx);
+    await vi.advanceTimersByTimeAsync(6_000);
+    const result = await promise;
+    const env = parseEnvelope(result);
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+    expect(env.error.retryable).toBe(false);
   });
 
   it('exits the poll loop and returns UPSTREAM_TIMEOUT when the request is aborted', async () => {

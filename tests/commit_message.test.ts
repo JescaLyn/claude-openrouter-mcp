@@ -97,6 +97,17 @@ describe('commit_message handler', () => {
     expect(userMsg.content).toContain('staged diff');
   });
 
+  it('surfaces upstream error from chatChain as-is', async () => {
+    const errChain = vi.fn().mockResolvedValue({
+      ok: false,
+      envelope: { error: { code: 'UPSTREAM_HTTP', message: 'upstream failed', retryable: true } },
+      fallback_chain: ['free/primary'],
+    });
+    const errCtx = { client: { chatChain: errChain, chatDirect: vi.fn() } as unknown as ToolContext['client'] };
+    const out = await handler({ diff: 'diff --git a/foo b/foo\n+hello' }, errCtx);
+    expect(envelope(out).error.code).toBe('UPSTREAM_HTTP');
+  });
+
   it('rejects empty diff_context', async () => {
     const { ctx } = stubCtx();
     const out = await handler(

@@ -49,6 +49,17 @@ describe('query_long_context handler', () => {
     expect(env.error.code).toBe('INVALID_INPUT');
   });
 
+  it('surfaces upstream error from chatChain as-is', async () => {
+    const ctx = stubCtx();
+    vi.mocked(ctx.client.chatChain as ReturnType<typeof vi.fn>).mockResolvedValue({
+      ok: false,
+      envelope: { error: { code: 'UPSTREAM_HTTP', message: 'upstream failed', retryable: true } },
+      fallback_chain: ['free/primary'],
+    });
+    const env = envelope(await handler({ prompt: 'some big input' }, ctx));
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+  });
+
   it('routes through long_context chain by default', async () => {
     const ctx = stubCtx();
     const env = envelope(await handler({ prompt: 'a very large prompt' }, ctx));

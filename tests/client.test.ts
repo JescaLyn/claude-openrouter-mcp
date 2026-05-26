@@ -163,6 +163,83 @@ describe('OpenRouterClient.chatChain', () => {
     if (!result.ok) return;
     expect(result.model_used).toBe('free/fallback');
   });
+
+  it('parses Retry-After as an HTTP-date and sleeps until that time', async () => {
+    vi.useFakeTimers();
+    const futureMs = Date.now() + 3_000;
+    const httpDate = new Date(futureMs).toUTCString();
+    // Primary model: 429 with Retry-After as an HTTP-date string (parseInt returns NaN).
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ error: { code: 429 } }), {
+        status: 429,
+        headers: { 'retry-after': httpDate },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(okResponse('after http-date retry'));
+
+    const promise = client.chatChain({
+      chain: TEST_CHAIN,
+      messages: [{ role: 'user', content: 'hi' }],
+    });
+    await vi.advanceTimersByTimeAsync(4_000);
+    const result = await promise;
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.content).toBe('after http-date retry');
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('uses x-ratelimit-reset epoch ms header when Retry-After is absent', async () => {
+    vi.useFakeTimers();
+    const resetEpochMs = Date.now() + 2_000;
+    fetchSpy.mockResolvedValueOnce(rateLimited({ resetEpochMs }));
+    fetchSpy.mockResolvedValueOnce(okResponse('after reset'));
+
+    const promise = client.chatChain({
+      chain: TEST_CHAIN,
+      messages: [{ role: 'user', content: 'hi' }],
+    });
+    await vi.advanceTimersByTimeAsync(3_000);
+    const result = await promise;
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.content).toBe('after reset');
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('sleeps for the maximum of Retry-After and x-ratelimit-reset when both are present', async () => {
+    vi.useFakeTimers();
+    const now = Date.now();
+    // Retry-After: 1 second, x-ratelimit-reset: now + 3000 ms (longer).
+    fetchSpy.mockResolvedValueOnce(
+      new Response(JSON.stringify({ error: { code: 429 } }), {
+        status: 429,
+        headers: {
+          'retry-after': '1',
+          'x-ratelimit-reset': String(now + 3_000),
+        },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(okResponse('after max'));
+
+    const promise = client.chatChain({
+      chain: TEST_CHAIN,
+      messages: [{ role: 'user', content: 'hi' }],
+    });
+    // Advancing only 1.5s should NOT be enough — the max wait is 3s.
+    await vi.advanceTimersByTimeAsync(1_500);
+    // Still pending at 1.5s
+    let settled = false;
+    promise.then(() => { settled = true; });
+    await vi.advanceTimersByTimeAsync(0);
+    expect(settled).toBe(false);
+
+    await vi.advanceTimersByTimeAsync(2_000);
+    const result = await promise;
+    expect(result.ok).toBe(true);
+  });
 });
 
 describe('OpenRouterClient.chatDirect', () => {

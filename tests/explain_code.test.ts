@@ -51,6 +51,22 @@ describe('explain_code handler', () => {
     expect(env.error.code).toBe('INVALID_INPUT');
   });
 
+  it('surfaces upstream error from chatChain as-is', async () => {
+    const ctx: ToolContext = {
+      client: {
+        chatChain: vi.fn().mockResolvedValue({
+          ok: false,
+          envelope: { error: { code: 'UPSTREAM_HTTP', message: 'upstream failed', retryable: true } },
+          fallback_chain: ['free/primary'],
+        }),
+        chatDirect: vi.fn(),
+      } as unknown as ToolContext['client'],
+    };
+    const out = await handler({ code: 'function f(){}' }, ctx);
+    const env = envelope(out);
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+  });
+
   it('passes valid args through to the client and returns success', async () => {
     const ctx = stubCtx();
     const out = await handler({ code: 'function f(){}', focus: 'security' }, ctx);

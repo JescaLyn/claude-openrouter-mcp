@@ -64,6 +64,21 @@ describe('analyze_video handler', () => {
     expect(env.error.code).toBe('INVALID_INPUT');
   });
 
+  it('surfaces upstream error from chatChain as-is', async () => {
+    const chatChain = vi.fn().mockResolvedValue({
+      ok: false,
+      envelope: { error: { code: 'UPSTREAM_HTTP', message: 'upstream failed', retryable: true } },
+      fallback_chain: ['free/primary'],
+    });
+    const tctx: ToolContext = {
+      client: { chatChain, chatDirect: vi.fn() } as unknown as ToolContext['client'],
+    };
+    const env = envelope(
+      await handler({ video: 'https://example.com/clip.mp4', prompt: 'describe' }, tctx),
+    );
+    expect(env.error.code).toBe('UPSTREAM_HTTP');
+  });
+
   it('routes valid input through analyze_video chain with a video block', async () => {
     const { ctx, chatChain } = stubCtx();
     const env = envelope(
